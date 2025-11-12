@@ -1,0 +1,7 @@
+# Ignore all SLURM log files
+logs/*.out
+logs/*.err
+
+# Optionally ignore any large zipped data artifacts
+*.zip
+*.tar.gz
