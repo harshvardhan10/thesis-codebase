@@ -2,6 +2,6 @@
 logs/*.out
 logs/*.err
 
-# Optionally ignore any large zipped data artifacts
+# Ignore any large zipped data artifacts
 *.zip
 *.tar.gz
