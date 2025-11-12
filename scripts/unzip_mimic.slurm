@@ -1,6 +1,5 @@
 #!/bin/bash
 #SBATCH --job-name=unzip-mimic
-#SBATCH --partition=standard
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
 #SBATCH --time=04:00:00
