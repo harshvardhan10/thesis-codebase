@@ -1,6 +1,5 @@
 #!/bin/bash
 #SBATCH --job-name=download-vindr-zip
-#SBATCH --partition=standard
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
 #SBATCH --time=08:00:00
