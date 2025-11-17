@@ -5,7 +5,6 @@
 #SBATCH --gres=gpu:8                 # 8 x RTX3080
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1                   # one launcher task; torch.distributed will spawn 2 procs
-#SBATCH --cpus-per-task=32            # CPU for dataloading across 8 GPUs.
 #SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_8gpus_%j.out   # stdout log
 #SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_8gpus_%j.err    # stderr log
 #SBATCH --mail-type=END,FAIL
