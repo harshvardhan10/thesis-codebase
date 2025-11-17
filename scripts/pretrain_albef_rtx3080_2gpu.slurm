@@ -20,8 +20,7 @@ echo "SLURM_JOB_NODELIST: $SLURM_JOB_NODELIST"
 # --------- Modules / Conda env ---------
 
 module load python
-# or whatever module you use for conda
-conda activate albef-env            # <-- change to your env name
+conda activate albef-env
 
 # Unbuffered Python so logs flush quickly
 export PYTHONUNBUFFERED=1
@@ -29,9 +28,9 @@ export PYTHONUNBUFFERED=1
 # Optional: fewer OpenMP threads per process
 export OMP_NUM_THREADS=1
 
-# --------- Go to repo & ensure log dir ---------
+# --------- Go to repo ---------
 
-cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1    # <-- adjust to your actual path
+cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 mkdir -p output_mimic_rtx3080
 
 echo "Using config: ./configs/Pretrain_rtx3080.yaml"
