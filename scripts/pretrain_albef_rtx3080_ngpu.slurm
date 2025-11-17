@@ -2,7 +2,7 @@
 #
 #SBATCH --job-name=albef-rtx7
 #SBATCH --partition=rtx3080
-#SBATCH --gres=gpu:7                 # 7 x RTX3080. All 8 GPUs not free on a node
+#SBATCH --gres=gpu:6                 # 6 x RTX3080
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1                   # one launcher task
 #SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_7gpus_%j.out   # stdout log
@@ -63,7 +63,7 @@ EOF
 # --------- Launch distributed training on 8 GPUs ---------
 
 python -u -m torch.distributed.launch \
-    --nproc_per_node=7 \
+    --nproc_per_node=6 \
     --use_env \
     Pretrain.py \
     --config ./configs/Pretrain_rtx3080_ngpu.yaml \
