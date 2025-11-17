@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=albef-pretrain
-#SBATCH --gres=gpu:a100:4          # 4x A100 GPUs on one node
-#SBATCH --partition=a100
+#SBATCH --gres=gpu:v100:4  # trying with v100 as a100 is not available
+#SBATCH --partition=v100
 #SBATCH --time=24:00:00            # adjust as needed
 #SBATCH --ntasks=1                 # one launcher task; torch.distributed will spawn 4 procs
 #SBATCH --cpus-per-task=8          # CPU cores for data loading etc.
