@@ -1,12 +1,12 @@
 #!/bin/bash -l
 #
-#SBATCH --job-name=albef-rtx8
+#SBATCH --job-name=albef-rtx7
 #SBATCH --partition=rtx3080
-#SBATCH --gres=gpu:8                 # 8 x RTX3080
+#SBATCH --gres=gpu:7                 # 7 x RTX3080. All 8 GPUs not free on a node
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1                   # one launcher task
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_8gpus_%j.out   # stdout log
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_8gpus_%j.err    # stderr log
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_7gpus_%j.out   # stdout log
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_7gpus_%j.err    # stderr log
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -39,8 +39,8 @@ export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 mkdir -p output_mimic_rtx3080
 
-echo "Using config: ./configs/Pretrain_rtx3080_8gpu.yaml"
-echo "Output dir:  ./output_mimic_rtx3080_8gpu"
+echo "Using config: ./configs/Pretrain_rtx3080_ngpu.yaml"
+echo "Output dir:  ./output_mimic_rtx3080_ngpu"
 echo "HF cache dir: $TRANSFORMERS_CACHE"
 
 # -----------------------------------------------------------------------------------
@@ -63,10 +63,10 @@ EOF
 # --------- Launch distributed training on 8 GPUs ---------
 
 python -u -m torch.distributed.launch \
-    --nproc_per_node=8 \
+    --nproc_per_node=7 \
     --use_env \
     Pretrain.py \
-    --config ./configs/Pretrain_rtx3080_8gpu.yaml \
-    --output_dir ./output_mimic_rtx3080_8gpu
+    --config ./configs/Pretrain_rtx3080_ngpu.yaml \
+    --output_dir ./output_mimic_rtx3080_ngpu
 
 echo "Job finished at $(date)"
