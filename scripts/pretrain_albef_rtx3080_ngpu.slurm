@@ -1,12 +1,12 @@
 #!/bin/bash -l
 #
-#SBATCH --job-name=albef-rtx7
+#SBATCH --job-name=albef-rtx6
 #SBATCH --partition=rtx3080
 #SBATCH --gres=gpu:6                 # 6 x RTX3080
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1                   # one launcher task
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_7gpus_%j.out   # stdout log
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_7gpus_%j.err    # stderr log
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_6gpus_%j.out   # stdout log
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_6gpus_%j.err    # stderr log
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
