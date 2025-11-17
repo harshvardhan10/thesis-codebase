@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/bash -l
 #SBATCH --job-name=prep-mimic-albef
 #SBATCH --partition=work
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
 #SBATCH --time=08:00:00
-#SBATCH --output=$WORK/logs/prepare_mimic_albef-%j.out
-#SBATCH --error=$WORK/logs/prepare_mimic_albef-%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/prepare_mimic_albef-%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/prepare_mimic_albef-%j.err
 
 echo "Job started at $(date)"
 echo "Running on node: $(hostname)"
