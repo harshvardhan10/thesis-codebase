@@ -133,55 +133,62 @@ def collect_pairs_from_negbio(
 
     pairs = []
 
-    for _, row in tqdm(df.iterrows(), total=len(df), desc="Studies"):
-        subject_id = int(row["subject_id"])
-        study_id = int(row["study_id"])
+    # Unique subjects (after any max_studies filtering)
+    subject_ids = df["subject_id"].unique()
+    total_subjects = len(subject_ids)
+    print(f"Found {total_subjects} unique subjects in NegBio CSV after filtering.")
 
-        caption_labels = build_caption_from_row(row)
-        if not caption_labels:
-            # no useful labels -> skip
-            continue
+    for idx, subject_id in enumerate(subject_ids, start=1):
+        subj_df = df[df["subject_id"] == subject_id]
 
-        study_dir = find_study_dir(base_dir, subject_id, study_id)
-        if study_dir is None or not os.path.isdir(study_dir):
-            # study not present in this subset
-            continue
+        for _, row in subj_df.iterrows():
+            study_id = int(row["study_id"])
 
-        # All jpg/jpeg images in this study dir
-        image_paths = sorted(
-            glob(os.path.join(study_dir, "*.jpg"))
-            + glob(os.path.join(study_dir, "*.jpeg"))
-        )
-        if not image_paths:
-            continue
+            caption_labels = build_caption_from_row(row)
+            if not caption_labels:
+                continue
 
-        # Filter to frontal views using metadata
-        frontal_images = []
-        for img_path in image_paths:
-            dicom_id = os.path.splitext(os.path.basename(img_path))[0]
-            view = metadata.get(dicom_id, "")
-            if view in FRONTAL_VIEWS:
-                frontal_images.append(img_path)
+            study_dir = find_study_dir(base_dir, subject_id, study_id)
+            if study_dir is None or not os.path.isdir(study_dir):
+                continue
 
-        if not frontal_images:
-            # No frontal image in this study
-            continue
-
-        if first_image_only:
-            frontal_images = frontal_images[:1]
-
-        for img_path in frontal_images:
-            if relative_to is not None:
-                img_stored = os.path.relpath(img_path, relative_to)
-            else:
-                img_stored = img_path
-
-            pairs.append(
-                {
-                    "image": img_stored,
-                    "caption": caption_labels,  # list of label strings
-                }
+            # All jpg/jpeg images in this study dir
+            image_paths = sorted(
+                glob(os.path.join(study_dir, "*.jpg"))
+                + glob(os.path.join(study_dir, "*.jpeg"))
             )
+            if not image_paths:
+                continue
+
+            # Filter to frontal views using metadata
+            frontal_images = []
+            for img_path in image_paths:
+                dicom_id = os.path.splitext(os.path.basename(img_path))[0]
+                view = metadata.get(dicom_id, "")
+                if view in FRONTAL_VIEWS:
+                    frontal_images.append(img_path)
+
+            if not frontal_images:
+                continue
+
+            if first_image_only:
+                frontal_images = frontal_images[:1]
+
+            for img_path in frontal_images:
+                if relative_to is not None:
+                    img_stored = os.path.relpath(img_path, relative_to)
+                else:
+                    img_stored = img_path
+
+                pairs.append(
+                    {
+                        "image": img_stored,
+                        "caption": caption_labels,  # list of label strings
+                    }
+                )
+
+        # ✅ per-subject log line
+        print(f"Subject {int(subject_id)} completed. {idx}/{total_subjects} subjects done.")
 
     return pairs
 
