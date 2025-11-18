@@ -1,11 +1,11 @@
 #!/bin/bash -l
-#SBATCH --job-name=albef-a100-2
+#SBATCH --job-name=albef-a100-4
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:2                 # using 2 GPUs again
+#SBATCH --gres=gpu:a40:4                 # using 2 GPUs again
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1                   # one launcher task
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_a100_2_%j.out   # stdout log
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_a100_2_%j.err    # stderr log
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_a100_4_%j.out   # stdout log
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_a100_4_%j.err    # stderr log
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -62,7 +62,7 @@ EOF
 # --------- Launch distributed training on 8 GPUs ---------
 
 python -u -m torch.distributed.launch \
-    --nproc_per_node=2 \
+    --nproc_per_node=4 \
     --use_env \
     Pretrain.py \
     --config ./configs/Pretrain.yaml \
