@@ -1,11 +1,11 @@
 #!/bin/bash -l
-#SBATCH --job-name=albef-a100-4
+#SBATCH --job-name=albef-a40
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:4                 # using 2 GPUs again
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1                   # one launcher task
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_a100_4_%j.out   # stdout log
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_a100_4_%j.err    # stderr log
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_a40_transformations_%j.out   # stdout log
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_a40_transformations_%j.err    # stderr log
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -39,7 +39,7 @@ cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 mkdir -p output_mimic_rtx3080
 
 echo "Using config: ./configs/Pretrain.yaml"
-echo "Output dir:  ./output_mimic_a40"
+echo "Output dir:  ./output_mimic_a40_transformations"
 echo "HF cache dir: $TRANSFORMERS_CACHE"
 
 # -----------------------------------------------------------------------------------
@@ -66,6 +66,6 @@ python -u -m torch.distributed.launch \
     --use_env \
     Pretrain.py \
     --config ./configs/Pretrain.yaml \
-    --output_dir ./output_mimic_a40
+    --output_dir ./output_mimic_a40_transformations
 
 echo "Job finished at $(date)"
