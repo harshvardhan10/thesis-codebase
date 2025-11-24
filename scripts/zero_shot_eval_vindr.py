@@ -1,298 +1,522 @@
 #!/usr/bin/env python
+"""
+Zero-shot evaluation of ALBEF checkpoints on VinDr-CXR (classification).
+
+What it does:
+- Loads one or more ALBEF checkpoints (pretrained on MIMIC).
+- Builds multi-prompt text embeddings for each VinDr label.
+- Runs zero-shot classification on the VinDr test set (image-level labels).
+- Computes:
+    - Per-label ROC–AUC
+    - Macro and micro ROC–AUC
+    - Per-label F1 (classification, global threshold)
+    - Macro and micro F1
+    - mAP@10 (mean average precision at 10, multilabel classification)
+
+Localization metrics (IoU@0.5, FROC) are NOT implemented here yet; you will plug
+them in later once you have pseudo-bounding boxes from heatmaps.
+"""
 
 import argparse
-from pathlib import Path
 import json
-import re
+from pathlib import Path
 
+import yaml
 import numpy as np
-import pandas as pd
-from PIL import Image
-
 import torch
+import torch.nn.functional as F
+import torch.backends.cudnn as cudnn
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
-import torch.nn.functional as F
+from PIL import Image
+import pandas as pd
+from sklearn.metrics import roc_auc_score, f1_score
 
 from ALBEF.models.model_pretrain import ALBEF
 from ALBEF.models.tokenization_bert import BertTokenizer
-import yaml
-
-from sklearn.metrics import roc_auc_score, f1_score
 
 
-def infer_label_columns(df: pd.DataFrame) -> (pd.DataFrame, list):
+# ==========================
+# Dataset
+# ==========================
+
+class VinDrClassificationDataset(Dataset):
     """
-    Try to infer label columns from a VinDr image_labels_*.csv.
-
-    Supports two formats:
-      1. Wide format: columns [image_id, rad_id, label1, label2, ...]
-      2. A column named 'labels' containing a string of 0/1 separated by spaces or commas.
-
-    Returns: (labels_array (N,L), label_names list)
+    Simple image-level classification dataset for VinDr-CXR.
+    Expects:
+      - CSV with columns: image_id, <label_1>, <label_2>, ...
+      - PNG images at: images_root / f"{image_id}.png"
     """
-    cols = df.columns.tolist()
 
-    # Case 1: 'labels' column with vector as string
-    if "labels" in cols and df["labels"].dtype == object:
-        # You MUST provide the label names in the correct order here:
-        # Adjust this list to the exact VinDr label order in your dataset.
-        VINDR_LABELS = [
-            "Aortic enlargement",
-            "Atelectasis",
-            "Cardiomegaly",
-            "Consolidation",
-            "ILD",
-            "Infiltration",
-            "Lung Opacity",
-            "Nodule/Mass",
-            "Pleural effusion",
-            "Pleural thickening",
-            "Pneumothorax",
-            "Pulmonary fibrosis",
-            "Other lesion",
-            "Fracture",
-            "Lung cyst",
-            "Mediastinal shift",
-            "No finding",
-        ]
-        def parse_vec(s):
-            # Example formats: "0 1 0 ..." or "0,1,0,..."
-            s = str(s).strip()
-            if "," in s:
-                parts = s.split(",")
-            else:
-                parts = s.split()
-            return np.array([int(p) for p in parts], dtype=np.int64)
-
-        labels_mat = np.stack(df["labels"].apply(parse_vec).values, axis=0)
-        assert labels_mat.shape[1] == len(VINDR_LABELS), \
-            f"labels vector length {labels_mat.shape[1]} != len(VINDR_LABELS) {len(VINDR_LABELS)}"
-        return labels_mat, VINDR_LABELS
-
-    # Case 2: wide format – treat all non-ID columns as labels
-    # Common id columns:
-    id_like = {"image_id", "imageID", "rad_id", "radID", "study_id"}
-    label_cols = [c for c in cols if c not in id_like]
-    labels_mat = df[label_cols].values.astype(np.int64)
-    return labels_mat, label_cols
-
-
-class VinDrTestDataset(Dataset):
-    def __init__(self, csv_path: str, images_root: str, image_res: int = 256, img_ext=".png"):
+    def __init__(self, csv_path, images_root, transform=None, max_images=None):
         self.df = pd.read_csv(csv_path)
         self.images_root = Path(images_root)
-        self.img_ext = img_ext
+        self.transform = transform
 
-        labels_mat, label_cols = infer_label_columns(self.df)
-        self.labels = labels_mat
-        self.label_names = label_cols
+        # assume first column is image_id, rest are label columns
+        self.id_col = self.df.columns[0]
+        self.label_cols = list(self.df.columns[1:])
 
-        normalize = transforms.Normalize(
-            (0.48145466, 0.4578275, 0.40821073),
-            (0.26862954, 0.26130258, 0.27577711),
+        # filter to rows with existing PNGs
+        self.df["__has_png__"] = self.df[self.id_col].apply(
+            lambda x: (self.images_root / f"{x}.png").exists()
         )
-        self.transform = transforms.Compose([
-            transforms.Resize((image_res, image_res), interpolation=Image.BICUBIC),
-            transforms.ToTensor(),
-            normalize,
-        ])
+        self.df = self.df[self.df["__has_png__"]].reset_index(drop=True)
+        if max_images is not None:
+            self.df = self.df.iloc[:max_images].reset_index(drop=True)
 
-        # assume 'image_id' column exists; adjust if named differently
-        if "image_id" in self.df.columns:
-            self.image_ids = self.df["image_id"].tolist()
-        else:
-            # try common variants
-            for c in self.df.columns:
-                if re.fullmatch(r"image[_ ]?id", c, re.IGNORECASE):
-                    self.image_ids = self.df[c].tolist()
-                    break
-            else:
-                raise ValueError("Could not find image_id column in CSV.")
+        self.num_labels = len(self.label_cols)
+        print(f"[VinDrClassificationDataset] Using {len(self.df)} images, {self.num_labels} labels")
 
     def __len__(self):
-        return len(self.image_ids)
+        return len(self.df)
 
     def __getitem__(self, idx):
-        image_id = self.image_ids[idx]
-        img_path = self.images_root / f"{image_id}{self.img_ext}"
-        if not img_path.exists():
-            raise FileNotFoundError(f"Image not found: {img_path}")
+        row = self.df.iloc[idx]
+        image_id = row[self.id_col]
+        img_path = self.images_root / f"{image_id}.png"
         img = Image.open(img_path).convert("RGB")
-        img = self.transform(img)
-        label_vec = self.labels[idx]
-        return img, torch.from_numpy(label_vec).float(), image_id
+        if self.transform is not None:
+            img = self.transform(img)
+
+        # labels: 0/1 per pathology
+        labels = row[self.label_cols].values.astype(np.float32)
+        return img, labels, image_id
 
 
-def build_prompts(label_names):
-    prompts = []
-    for label in label_names:
-        if re.search("no finding", label, re.IGNORECASE):
-            prompts.append("A normal chest x-ray with no abnormal findings.")
-        else:
-            prompts.append(f"A chest x-ray showing {label}.")
-    return prompts
+# ==========================
+# Prompts & Feature Extraction
+# ==========================
 
-
-def get_image_text_features(model, images, text_inputs):
+def build_prompts_for_label(label: str):
     """
-    Extract image & text embeddings from ALBEF for zero-shot.
+    Multi-prompt template expansion for a single VinDr label.
 
-    This assumes your ALBEF implementation has:
-      - model.visual_encoder
-      - model.vision_proj
-      - model.text_encoder
-      - model.text_proj
-
-    If your attribute names differ, adapt accordingly.
+    Special case:
+      - For "No finding" only use the bare label, because
+        templates like "There is evidence of No finding" doesn't make sense.
     """
-    # Image features
-    image_embeds = model.visual_encoder(images)
-    # CLS token = first token
-    image_feat = model.vision_proj(image_embeds[:, 0, :])
-    image_feat = F.normalize(image_feat, dim=-1)
+    # Normalize label a bit for text
+    clean_label = label.replace("_", " ")
 
-    # Text features
-    text_output = model.text_encoder(
-        text_inputs.input_ids,
-        attention_mask=text_inputs.attention_mask,
-        return_dict=True,
+    # Special-case: No finding
+    if clean_label.strip().lower() == "no finding":
+        return ["No finding"]
+
+    templates = [
+        "{label}",
+        "A chest X-ray showing {label}.",
+        "Chest radiograph demonstrating {label}.",
+        "There is evidence of {label}.",
+        "Findings are consistent with {label}.",
+    ]
+    return [t.format(label=clean_label) for t in templates]
+
+
+def get_label_text_embeddings(model, tokenizer, labels, device, max_length=32):
+    """
+    Compute one embedding per label by averaging over multiple prompts.
+    Returns:
+        label_embs: torch.Tensor of shape (L, D)
+    """
+    all_prompts = []
+    label_ranges = []  # list of (start_idx, end_idx) in all_prompts for each label
+
+    for label in labels:
+        prompts = build_prompts_for_label(label)
+        start = len(all_prompts)
+        all_prompts.extend(prompts)
+        end = len(all_prompts)
+        label_ranges.append((start, end))
+
+    print(f"[Text] Total prompts: {len(all_prompts)} for {len(labels)} labels")
+
+    tokenized = tokenizer(
+        all_prompts,
+        padding=True,
+        truncation=True,
+        max_length=max_length,
+        return_tensors="pt",
     )
-    text_feat = model.text_proj(text_output.last_hidden_state[:, 0, :])
-    text_feat = F.normalize(text_feat, dim=-1)
+    tokenized = {k: v.to(device) for k, v in tokenized.items()}
 
-    return image_feat, text_feat
+    with torch.no_grad():
+        # Use the inner BertModel with mode="text" (no cross-attention)
+        text_output = model.text_encoder.bert(
+            input_ids=tokenized["input_ids"],
+            attention_mask=tokenized["attention_mask"],
+            return_dict=True,
+            mode="text",
+        )
+        cls = text_output.last_hidden_state[:, 0, :]  # (P, 768)
+        feats = model.text_proj(cls)                  # (P, D)
+        feats = F.normalize(feats, dim=-1)           # (P, D)
+
+    # Average prompts per label
+    label_embs = []
+    for (start, end) in label_ranges:
+        label_embs.append(feats[start:end].mean(dim=0))
+    label_embs = torch.stack(label_embs, dim=0)      # (L, D)
+
+    return label_embs
 
 
-def main(args):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
+def get_image_embeddings(model, images):
+    """
+    images: (B, 3, H, W) on device
+    returns: (B, D) normalized image embeddings
+    """
+    with torch.no_grad():
+        image_embeds = model.visual_encoder(images)   # (B, num_patches+1, 768)
+        image_cls = image_embeds[:, 0, :]             # (B, 768)
+        image_feat = model.vision_proj(image_cls)     # (B, D)
+        image_feat = F.normalize(image_feat, dim=-1)
+    return image_feat
+
+
+# ==========================
+# Metrics
+# ==========================
+
+def compute_map_at_k(y_true, scores, k=10):
+    """
+    Compute mAP@k for multilabel classification.
+
+    For each sample:
+      - Rank labels by score (descending).
+      - Consider top-k labels.
+      - Compute "AP@k" as the average of precisions at ranks where the label is positive,
+        normalized by min(#positives, k).
+    Then average AP@k over all samples that have at least one positive label.
+
+    Args:
+        y_true:  (N, L) binary array
+        scores:  (N, L) float scores (higher = more likely positive)
+        k:       top-k cutoff (default: 10)
+
+    Returns:
+        mAP@k (float) or None if no sample has a positive.
+    """
+    y_true = np.asarray(y_true)
+    scores = np.asarray(scores)
+    N, L = y_true.shape
+    ap_list = []
+
+    for i in range(N):
+        y = y_true[i]
+        s = scores[i]
+        pos_idx = np.where(y == 1)[0]
+        if len(pos_idx) == 0:
+            continue
+
+        order = np.argsort(-s)      # descending
+        topk = order[:k]
+
+        hits = 0
+        precisions = []
+        for rank, idx in enumerate(topk, start=1):
+            if y[idx] == 1:
+                hits += 1
+                precisions.append(hits / rank)
+
+        if len(precisions) == 0:
+            ap = 0.0
+        else:
+            denom = min(len(pos_idx), k)
+            ap = float(np.sum(precisions) / denom)
+        ap_list.append(ap)
+
+    if len(ap_list) == 0:
+        return None
+    return float(np.mean(ap_list))
+
+
+def compute_classification_metrics(y_true, scores, label_names, threshold=0.5):
+    """
+    y_true:  (N, L) 0/1
+    scores:  (N, L) continuous similarities (higher = more positive)
+
+    Computes:
+      - per-label ROC–AUC + macro/micro AUC
+      - per-label F1 + macro/micro F1 (using a global threshold)
+      - mAP@10 (multilabel classification)
+    """
+    y_true = np.asarray(y_true)
+    scores = np.asarray(scores)
+    N, L = y_true.shape
+    assert scores.shape == (N, L)
+
+    metrics = {}
+
+    # ----- ROC–AUC -----
+    per_label_auc = {}
+    auc_values = []
+    for j, label in enumerate(label_names):
+        y = y_true[:, j]
+        # need both classes present
+        if len(np.unique(y)) < 2:
+            per_label_auc[label] = None
+            continue
+        try:
+            auc = roc_auc_score(y, scores[:, j])
+            per_label_auc[label] = float(auc)
+            auc_values.append(auc)
+        except ValueError:
+            per_label_auc[label] = None
+
+    metrics["per_label_auc"] = per_label_auc
+    metrics["macro_auc"] = float(np.mean(auc_values)) if len(auc_values) > 0 else None
+
+    # micro-AUC: flatten all labels
+    try:
+        metrics["micro_auc"] = float(roc_auc_score(y_true.ravel(), scores.ravel()))
+    except ValueError:
+        metrics["micro_auc"] = None
+
+    # ----- F1 (using a global threshold) -----
+    y_pred = (scores >= threshold).astype(int)
+
+    per_label_f1 = {}
+    f1_values = []
+    for j, label in enumerate(label_names):
+        y = y_true[:, j]
+        y_hat = y_pred[:, j]
+        if len(np.unique(y)) < 2:
+            per_label_f1[label] = None
+            continue
+        f1 = f1_score(y, y_hat)
+        per_label_f1[label] = float(f1)
+        f1_values.append(f1)
+    metrics["per_label_f1"] = per_label_f1
+    metrics["macro_f1"] = float(np.mean(f1_values)) if len(f1_values) > 0 else None
+
+    # micro-F1 (flatten)
+    metrics["micro_f1"] = float(f1_score(y_true.ravel(), y_pred.ravel()))
+
+    # ----- mAP@10 (multilabel classification) -----
+    metrics["map_at_10"] = compute_map_at_k(y_true, scores, k=10)
+
+    return metrics
+
+
+# ==========================
+# Localization metrics stub
+# ==========================
+
+def compute_localization_metrics_stub():
+    """
+    Placeholder for future work:
+    - IoU=0.5
+    - FROC
+
+    Will need:
+      - Ground truth boxes from VinDr: annotations_test.csv
+      - Predicted boxes from the heatmap → bbox pipeline, e.g.:
+          pred_boxes[image_id][label] = list of (x1, y1, x2, y2, score)
+
+    Then:
+      - Compute IoU between predicted and GT boxes,
+      - Derive TP/FP/FN per IoU threshold,
+      - Compute per-label AP, then mAP,
+      - Compute FROC: sensitivity vs FP/image.
+    """
+    return None
+
+
+# ==========================
+# Main evaluation logic
+# ==========================
+
+def evaluate_checkpoint(
+    ckpt_path,
+    config,
+    csv_path,
+    images_root,
+    batch_size,
+    num_workers,
+    device,
+    output_dir,
+    max_images=None,
+    threshold=0.5,
+):
+    """
+    Runs zero-shot classification evaluation for a single checkpoint.
+    Returns a metrics dict.
+    """
+
+    print(f"\n========== Evaluating checkpoint: {ckpt_path} ==========")
+    ckpt_path = Path(ckpt_path)
+    ckpt_name = ckpt_path.stem
+
+    # ----- Dataset & DataLoader -----
+    normalize = transforms.Normalize(
+        (0.48145466, 0.4578275, 0.40821073),
+        (0.26862954, 0.26130258, 0.27577711),
+    )
+    test_transform = transforms.Compose([
+        transforms.Resize((config["image_res"], config["image_res"])),
+        transforms.ToTensor(),
+        normalize,
+    ])
+
+    dataset = VinDrClassificationDataset(
+        csv_path=csv_path,
+        images_root=images_root,
+        transform=test_transform,
+        max_images=max_images,
+    )
+    label_names = dataset.label_cols
+
+    data_loader = DataLoader(
+        dataset,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        shuffle=False,
+        pin_memory=True,
+        drop_last=False,
+    )
+
+    # ----- Model -----
+    tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+
+    print("[Model] Building ALBEF...")
+    model = ALBEF(
+        config=config,
+        text_encoder="bert-base-uncased",
+        tokenizer=tokenizer,
+        init_deit=False,   # load from checkpoint
+    )
+    checkpoint = torch.load(ckpt_path, map_location="cpu")
+    msg = model.load_state_dict(checkpoint["model"], strict=False)
+    print("[Model] State dict loaded:", msg)
+
+    model.to(device)
+    model.eval()
+
+    # ----- Text embeddings (multi-prompt per label) -----
+    label_embs = get_label_text_embeddings(model, tokenizer, label_names, device)
+    label_embs = label_embs.to(device)  # (L, D)
+
+    # ----- Inference loop -----
+    all_scores = []
+    all_labels = []
+    all_ids = []
+
+    with torch.no_grad():
+        for i, (images, labels, image_ids) in enumerate(data_loader):
+            images = images.to(device, non_blocking=True)    # (B,3,H,W)
+            labels = labels.numpy().astype(np.float32)       # (B,L)
+
+            image_embs = get_image_embeddings(model, images) # (B,D)
+
+            # cosine similarities: (B, L)
+            sims = image_embs @ label_embs.t()
+            scores = sims.cpu().numpy()
+
+            all_scores.append(scores)
+            all_labels.append(labels)
+            all_ids.extend(list(image_ids))
+
+            if (i + 1) % 10 == 0 or (i + 1) == len(data_loader):
+                print(f"[Eval] Processed {i+1}/{len(data_loader)} batches")
+
+    all_scores = np.vstack(all_scores)   # (N,L)
+    all_labels = np.vstack(all_labels)   # (N,L)
+
+    print("Scores shape:", all_scores.shape)
+    print("Labels shape:", all_labels.shape)
+
+    # ----- Classification metrics -----
+    cls_metrics = compute_classification_metrics(
+        y_true=all_labels,
+        scores=all_scores,
+        label_names=label_names,
+        threshold=threshold,
+    )
+
+    # ----- Localization metrics -----
+    # loc_metrics = compute_localization_metrics_stub() # TODO
+
+    # ----- Aggregate -----
+    results = {
+        "checkpoint": str(ckpt_path),
+        "num_images": int(all_scores.shape[0]),
+        "label_names": list(label_names),
+        "classification": cls_metrics,
+        # "localization": loc_metrics,
+        "threshold": float(threshold),
+    }
+
+    # Save JSON
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    out_path = output_dir / f"vindr_zero_shot_{ckpt_name}.json"
+    with open(out_path, "w") as f:
+        json.dump(results, f, indent=2)
+    print(f"[Output] Saved metrics to: {out_path}")
+
+    return results
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Zero-shot VinDr-CXR evaluation for ALBEF checkpoints")
+
+    parser.add_argument("--config", type=str, default="configs/Pretrain.yaml")
+    parser.add_argument("--checkpoints", type=str, nargs="+", required=True,
+                        help="List of checkpoint paths to evaluate")
+    parser.add_argument("--labels_csv", type=str, required=True,
+                        help="Path to image-level labels CSV (e.g. image_labels_test.csv)")
+    parser.add_argument("--images_root", type=str, required=True,
+                        help="Root folder containing VinDr test PNGs")
+    parser.add_argument("--output_dir", type=str, default="vindr_zero_shot_results")
+
+    parser.add_argument("--batch_size", type=int, default=64)
+    parser.add_argument("--num_workers", type=int, default=4)
+    parser.add_argument("--device", type=str, default="cuda")
+    parser.add_argument("--threshold", type=float, default=0.5,
+                        help="Global threshold used for F1 computation")
+    parser.add_argument("--max_images", type=int, default=None,
+                        help="Optional: limit number of images for quick debugging")
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+
+    # Device
+    device = torch.device(args.device if torch.cuda.is_available() else "cpu")
+    print(f"[Device] Using: {device}")
+
+    cudnn.benchmark = True
 
     # Load config
     with open(args.config, "r") as f:
         config = yaml.safe_load(f)
-    image_res = config.get("image_res", 256)
-    text_encoder_name = args.text_encoder or config.get("text_encoder", "bert-base-uncased")
 
-    # Dataset
-    dataset = VinDrTestDataset(
-        csv_path=args.labels_csv,
-        images_root=args.images_root,
-        image_res=image_res,
-        img_ext=args.img_ext,
-    )
-    label_names = dataset.label_names
-    print(f"Loaded {len(dataset)} VinDr test samples with {len(label_names)} labels")
-    print("Labels:", label_names)
+    # Evaluate each checkpoint
+    all_results = {}
+    for ckpt in args.checkpoints:
+        res = evaluate_checkpoint(
+            ckpt_path=ckpt,
+            config=config,
+            csv_path=args.labels_csv,
+            images_root=args.images_root,
+            batch_size=args.batch_size,
+            num_workers=args.num_workers,
+            device=device,
+            output_dir=args.output_dir,
+            max_images=args.max_images,
+            threshold=args.threshold,
+        )
+        all_results[Path(ckpt).name] = res
 
-    loader = DataLoader(
-        dataset,
-        batch_size=args.batch_size,
-        shuffle=False,
-        num_workers=args.num_workers,
-        pin_memory=True,
-    )
-
-    # Model + tokenizer
-    tokenizer = BertTokenizer.from_pretrained(text_encoder_name)
-    model = ALBEF(config=config, text_encoder=text_encoder_name, tokenizer=tokenizer, init_deit=False)
-    ckpt = torch.load(args.checkpoint, map_location="cpu")
-    model.load_state_dict(ckpt["model"], strict=False)
-    model.to(device)
-    model.eval()
-
-    # Prompts & text inputs
-    prompts = build_prompts(label_names)
-    text_inputs = tokenizer(
-        prompts,
-        padding=True,
-        truncation=True,
-        max_length=25,
-        return_tensors="pt",
-    ).to(device)
-
-    all_labels = []
-    all_scores = []
-
-    with torch.no_grad():
-        # Precompute text features once
-        dummy_images = torch.zeros(1, 3, image_res, image_res, device=device)
-        _, text_feat = get_image_text_features(model, dummy_images, text_inputs)
-        text_feat = text_feat.detach()  # (L, D)
-
-        for images, labels, _image_ids in loader:
-            images = images.to(device, non_blocking=True)
-            labels_np = labels.numpy()
-
-            image_feat, _ = get_image_text_features(model, images, text_inputs)
-            # Normalize again if needed
-            image_feat = F.normalize(image_feat, dim=-1)
-            sims = image_feat @ text_feat.t()  # (B, L)
-            scores_np = sims.cpu().numpy()
-
-            all_labels.append(labels_np)
-            all_scores.append(scores_np)
-
-    all_labels = np.concatenate(all_labels, axis=0)  # (N, L)
-    all_scores = np.concatenate(all_scores, axis=0)  # (N, L)
-
-    results = {}
-    for j, label in enumerate(label_names):
-        y_true = all_labels[:, j]
-        y_score = all_scores[:, j]
-
-        # Skip labels with no positives or no negatives
-        if y_true.sum() == 0 or (1 - y_true).sum() == 0:
-            auc = float("nan")
-            best_f1 = 0.0
-            best_thr = 0.0
-        else:
-            try:
-                auc = roc_auc_score(y_true, y_score)
-            except ValueError:
-                auc = float("nan")
-
-            # Best F1 over thresholds
-            best_f1 = 0.0
-            best_thr = 0.0
-            # choose thresholds between percentiles of scores
-            thr_grid = np.linspace(np.percentile(y_score, 5), np.percentile(y_score, 95), 50)
-            for thr in thr_grid:
-                y_pred = (y_score >= thr).astype(int)
-                if y_pred.sum() == 0 and y_true.sum() == 0:
-                    continue
-                f1 = f1_score(y_true, y_pred, zero_division=0)
-                if f1 > best_f1:
-                    best_f1 = f1
-                    best_thr = thr
-
-        results[label] = {
-            "auc": float(auc),
-            "best_f1": float(best_f1),
-            "best_threshold": float(best_thr),
-        }
-
-    out_path = Path(args.output_json)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(results, indent=2))
-    print(f"Saved results to {out_path}")
-
-    print("\nLabel\tAUC\tF1")
-    for label in label_names:
-        r = results[label]
-        print(f"{label}\t{r['auc']:.3f}\t{r['best_f1']:.3f}")
+    # Save combined results
+    combined_path = Path(args.output_dir) / "vindr_zero_shot_all_checkpoints.json"
+    with open(combined_path, "w") as f:
+        json.dump(all_results, f, indent=2)
+    print(f"[Output] Saved combined metrics to: {combined_path}")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", required=True, help="Path to ALBEF pretrain config yaml")
-    parser.add_argument("--checkpoint", required=True, help="Path to ALBEF checkpoint_XX.pth")
-    parser.add_argument("--labels_csv", default="Annotations/image_labels_test.csv")
-    parser.add_argument("--images_root", default="Test", help="Folder with VinDr test PNGs")
-    parser.add_argument("--img_ext", default=".png")
-    parser.add_argument("--output_json", default="results/vindr_zero_shot_test.json")
-    parser.add_argument("--batch_size", type=int, default=32)
-    parser.add_argument("--num_workers", type=int, default=4)
-    parser.add_argument("--text_encoder", default=None)
-    args = parser.parse_args()
-    main(args)
+    main()
