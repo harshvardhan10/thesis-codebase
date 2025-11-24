@@ -26,21 +26,18 @@ export PYTHONUNBUFFERED=1
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 
-cd /home/hpc/iwi5/iwi5362h/thesis-codebase/scripts || exit 1
-
-# Add ALBEF repo to Python search path
-export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
+cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
 python -u zero_shot_eval_vindr.py \
-  --config /home/woody/iwi5/iwi5362h/ALBEF/configs/Pretrain.yaml \
+  --config configs/Pretrain.yaml \
   --checkpoints \
-    /home/woody/iwi5/iwi5362h/ALBEF/output_mimic_a40_transformations/checkpoint_09.pth \
-    /home/woody/iwi5/iwi5362h/ALBEF/output_mimic_a40_transformations/checkpoint_19.pth \
-    /home/woody/iwi5/iwi5362h/ALBEF/output_mimic_a40_transformations/checkpoint_29.pth \
-    /home/woody/iwi5/iwi5362h/ALBEF/output_mimic_a40_transformations/checkpoint_best.pth \
+    output_mimic_a40_transformations/checkpoint_09.pth \
+    output_mimic_a40_transformations/checkpoint_19.pth \
+    output_mimic_a40_transformations/checkpoint_29.pth \
+    output_mimic_a40_transformations/checkpoint_best.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir /home/woody/iwi5/iwi5362h/vindr_zero_shot_results_a40 \
+  --output_dir vindr_zero_shot_results_a40 \
   --batch_size 64 \
   --num_workers 8 \
   --device cuda \
