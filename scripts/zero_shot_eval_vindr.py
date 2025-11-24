@@ -32,8 +32,8 @@ from PIL import Image
 import pandas as pd
 from sklearn.metrics import roc_auc_score, f1_score
 
-from ALBEF.models.model_pretrain import ALBEF
-from ALBEF.models.tokenization_bert import BertTokenizer
+from models.model_pretrain import ALBEF
+from models.tokenization_bert import BertTokenizer
 
 
 # ==========================
