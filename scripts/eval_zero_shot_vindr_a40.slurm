@@ -41,6 +41,5 @@ python -u zero_shot_eval_vindr.py \
   --batch_size 64 \
   --num_workers 8 \
   --device cuda \
-  --max_images 100
 
 echo "Job finished at $(date)"
