@@ -26,7 +26,7 @@ export PYTHONUNBUFFERED=1
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 
-cd /home/woody/iwi5/iwi5362h/thesis-codebase/scripts || exit 1
+cd ~/home/hpc/iwi5/iwi5362h/thesis-codebase/scripts || exit 1
 
 python -u zero_shot_eval_vindr.py \
   --config ~/home/woody/iwi5/iwi5362h/ALBEF/configs/Pretrain.yaml \
