@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=albef-a40
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:4                 # using 2 GPUs again
+#SBATCH --gres=gpu:a40:4                 # using 4 GPUs again
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1                   # one launcher task
 #SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_a40_transformations_%j.out   # stdout log
