@@ -36,8 +36,8 @@ cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
 python -u scripts/extract_albef_cross_attn_gradcam.py \
-  --config ../configs/Pretrain.yaml \
-  --checkpoint ../output_mimic_a40_transformations/checkpoint_29.pth \
+  --config configs/Pretrain.yaml \
+  --checkpoint output_mimic_a40_transformations/checkpoint_29.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
   --output_dir /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/heatmaps_vindr
