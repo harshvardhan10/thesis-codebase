@@ -33,7 +33,7 @@ export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 
 cd /home/woody/iwi5/iwi5362h/ALBEF/scripts || exit 1
 
-python - u extract_albef_cross_attn_gradcam.py \
+python -u extract_albef_cross_attn_gradcam.py \
   --config ../configs/Pretrain.yaml \
   --checkpoint ../output_mimic_a40_transformations/checkpoint_29.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
