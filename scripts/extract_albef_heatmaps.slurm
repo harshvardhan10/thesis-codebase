@@ -31,9 +31,11 @@ export OMP_NUM_THREADS=1
 # HuggingFace cache (shared for all jobs)
 export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 
-cd /home/woody/iwi5/iwi5362h/ALBEF/scripts || exit 1
+cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
-python -u extract_albef_cross_attn_gradcam.py \
+export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
+
+python -u scripts/extract_albef_cross_attn_gradcam.py \
   --config ../configs/Pretrain.yaml \
   --checkpoint ../output_mimic_a40_transformations/checkpoint_29.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
