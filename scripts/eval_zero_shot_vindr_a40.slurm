@@ -28,6 +28,8 @@ export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 
 cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
+export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
+
 python -u zero_shot_eval_vindr.py \
   --config configs/Pretrain.yaml \
   --checkpoints \
@@ -37,9 +39,8 @@ python -u zero_shot_eval_vindr.py \
     output_mimic_a40_transformations/checkpoint_best.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir vindr_zero_shot_results_a40 \
-  --batch_size 64 \
-  --num_workers 8 \
-  --device cuda \
+  --output_dir results/zero_shot_vindr_results/classification \
+  --save_scores \
+  --save_scores_csv
 
 echo "Job finished at $(date)"
