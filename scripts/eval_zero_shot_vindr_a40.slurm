@@ -30,7 +30,7 @@ cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
 export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
-python -u zero_shot_eval_vindr.py \
+python -u scripts/zero_shot_eval_vindr.py \
   --config configs/Pretrain.yaml \
   --checkpoints \
     output_mimic_a40_transformations/checkpoint_09.pth \
