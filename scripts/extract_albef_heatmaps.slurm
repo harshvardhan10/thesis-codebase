@@ -4,8 +4,8 @@
 #SBATCH --gres=gpu:a40:1
 #SBATCH --time=8:00:00
 #SBATCH --ntasks=1                   # one launcher task
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/extract_albef_heatmaps_%j.out   # stdout log
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/extract_albef_heatmaps_%j.err    # stderr log
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/extract_albef_heatmaps_raw_vis_%j.out   # stdout log
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/extract_albef_heatmaps_raw_vis_%j.err    # stderr log
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -40,6 +40,6 @@ python -u scripts/extract_albef_cross_attn_gradcam.py \
   --checkpoint output_mimic_a40_transformations/checkpoint_29.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/heatmaps_vindr
+  --output_dir /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/heatmaps_vindr_raw_vis
 
 echo "Job finished at $(date)"
