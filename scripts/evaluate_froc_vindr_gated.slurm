@@ -4,8 +4,8 @@
 #SBATCH --gres=gpu:a40:1
 #SBATCH --time=8:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/evaluate_froc_vindr_%j.out   # stdout log
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/evaluate_froc_vindr_%j.err    # stderr log
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/evaluate_froc_vindr_gated_%j.out   # stdout log
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/evaluate_froc_vindr_gated_%j.err    # stderr log
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -37,7 +37,8 @@ python -u scripts/evaluate_froc_vindr_gated.py \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --ann_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/annotations_test.csv \
   --meta_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/test_meta.csv \
-  --output_dir /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/froc_top_3_labels \
+  --output_dir /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/froc_top_10_labels \
+  --scores_npz /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/classification/vindr_zero_shot_scores_checkpoint_29.npz \
   --thr_min 0.35 \
   --thr_max 0.95 \
   --n_thr 14 \
