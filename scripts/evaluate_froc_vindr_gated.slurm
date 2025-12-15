@@ -38,8 +38,11 @@ python -u scripts/evaluate_froc_vindr_gated.py \
   --ann_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/annotations_test.csv \
   --meta_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/test_meta.csv \
   --output_dir /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/froc_top_3_labels \
-  --top_k_labels 3 \
-  --thr_min 0.35 --thr_max 0.95 --n_thr 14 \
+  --thr_min 0.35 \
+  --thr_max 0.95 \
+  --n_thr 14 \
+  --top_k_labels 10 \
+  --top_k_boxes 1 \
   --score_fusion mul
 
 echo "Job finished at $(date)"
