@@ -37,7 +37,7 @@ python -u scripts/evaluate_froc_vindr_gated.py \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --ann_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/annotations_test.csv \
   --meta_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/test_meta.csv \
-  --output_dir /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/froc/froc_top_10_labels_debug_issue_a_z_score_gating \
+  --output_dir /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/froc/froc_top_10_labels_score_analysis \
   --scores_npz /home/woody/iwi5/iwi5362h/ALBEF/results/zero_shot_vindr_results/classification/vindr_zero_shot_scores_checkpoint_29.npz \
   --thr_min 0.35 \
   --thr_max 0.95 \
