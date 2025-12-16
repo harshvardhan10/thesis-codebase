@@ -33,7 +33,7 @@ cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
 python -u scripts/evaluate_froc_vindr_gated.py \
-  --heatmaps_dir results/zero_shot_vindr_results/heatmaps_vindr \
+  --heatmaps_dir results/zero_shot_vindr_results/heatmaps_vindr_raw_vis \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --ann_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/annotations_test.csv \
   --meta_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/test_meta.csv \
