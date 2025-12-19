@@ -1,12 +1,12 @@
 #!/bin/bash -l
 #
-#SBATCH --job-name=chexzero-vindr-zeroshot-a40
+#SBATCH --job-name=medklip-vindr-zeroshot-a40
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:1          # 1 x A40
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/chexzero_vindr_zeroshot_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/chexzero_vindr_zeroshot_%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/medklip_vindr_zeroshot_%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/medklip_vindr_zeroshot_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -20,11 +20,11 @@ export http_proxy=http://proxy.nhr.fau.de:80
 export https_proxy=http://proxy.nhr.fau.de:80
 
 module load python
-conda activate chexzero-env
+conda activate medklip-env
 
-cd /home/woody/iwi5/iwi5362h/CheXzero || exit 1
+cd /home/woody/iwi5/iwi5362h/MedKLIP || exit 1
 
-export PYTHONPATH=/home/woody/iwi5/iwi5362h/CheXzero:$PYTHONPATH
+export PYTHONPATH=/home/woody/iwi5/iwi5362h/MedKLIP:$PYTHONPATH
 
 python -u zero_shot_vindr/medklip_zero_shot_vindr.py \
   --config /home/woody/iwi5/iwi5362h/MedKLIP/zero_shot_vindr/MedKLIP_config.yaml \
