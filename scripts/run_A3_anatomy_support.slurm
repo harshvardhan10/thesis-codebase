@@ -1,11 +1,11 @@
 #!/bin/bash -l
-#SBATCH --job-name=albef-A3-debug
+#SBATCH --job-name=albef-A3-full
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:1
-#SBATCH --time=06:00:00
+#SBATCH --gres=gpu:a40:4
+#SBATCH --time=24:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_A3_debug_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_A3_debug_%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_A3_full_%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_A3_full_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -25,13 +25,13 @@ export HF_HOME=/home/woody/iwi5/iwi5362h/.cache/huggingface
 
 cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
-mkdir -p ./output_anatomy_A3_support_debug
+mkdir -p ./output_anatomy_A3_support_full
 
 python -u -m torch.distributed.launch \
-    --nproc_per_node=1 \
+    --nproc_per_node=4 \
     --use_env \
     Pretrain_anatomy_prior.py \
     --config ./configs/Pretrain_anatomy_prior_A3.yaml \
-    --output_dir ./output_anatomy_A3_support_debug
+    --output_dir ./output_anatomy_A3_support_full
 
 echo "Job finished at $(date)"
