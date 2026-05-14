@@ -1,12 +1,12 @@
 #!/bin/bash -l
 #
-#SBATCH --job-name=zero_shot_A1
+#SBATCH --job-name=zero_shot_A2
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:1          # 1 x A40
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/zero_shot_A1_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/zero_shot_A1_%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/zero_shot_A2_%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/zero_shot_A2_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -32,10 +32,10 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 python -u scripts/zero_shot_eval_vindr.py \
   --config configs/Pretrain.yaml \
   --checkpoints \
-    output_anatomy_A1_support_full/checkpoint_best.pth \
+    output_anatomy_A2_support_full/checkpoint_best.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir results/zero_shot_A1 \
+  --output_dir results/zero_shot_A2 \
   --save_scores \
   --save_scores_csv
 
