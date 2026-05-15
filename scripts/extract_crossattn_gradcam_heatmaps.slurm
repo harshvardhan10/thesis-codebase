@@ -31,7 +31,7 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
 python -u scripts/extract_crossattn_gradcam_heatmaps.py \
   --config configs/Pretrain.yaml \
-  --checkpoint output_anatomy_A1_full/checkpoint_best.pth \
+  --checkpoint output_anatomy_A1_support_full/checkpoint_best.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
   --output_dir results/anatomy_prior_screening_15k/A1/heatmaps_crossattn_gradcam_layer8 \
