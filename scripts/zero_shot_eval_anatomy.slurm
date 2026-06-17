@@ -32,10 +32,10 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 python -u scripts/zero_shot_eval_vindr.py \
   --config configs/Pretrain_anatomy_prior_A3.yaml \
   --checkpoints \
-    output_anatomy_A3_support_full/checkpoint_best.pth \
+    output_anatomy_A3_lamda_0.005/checkpoint_best.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir results/anatomy_prior_screening_full/A3/zero_shot_A3_with_f1 \
+  --output_dir results/anatomy_prior_screening_full/A3_0.005/zero_shot_A3_with_f1 \
   --save_scores \
   --save_scores_csv
 
