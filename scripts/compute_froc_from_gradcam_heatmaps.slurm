@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:a40:1
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/froc_from_gradcam_A3_full_0.005_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/froc_from_gradcam_A3_full_0.005_%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/froc_from_gradcam_A3_full_0.001_%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/froc_from_gradcam_A3_full_0.001_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
