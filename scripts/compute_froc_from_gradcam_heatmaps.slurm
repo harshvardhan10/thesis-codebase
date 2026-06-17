@@ -30,10 +30,10 @@ cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
 python -u scripts/compute_froc_from_gradcam_heatmaps.py \
-  --heatmaps_dir results/anatomy_prior_screening_full/A3_0.005/heatmaps_crossattn_gradcam_layer8 \
+  --heatmaps_dir results/anatomy_prior_screening_full/A3_0.001/heatmaps_crossattn_gradcam_layer8 \
   --annotations_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/annotations_test.csv \
   --meta_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/test_meta.csv \
-  --output_dir results/anatomy_prior_screening_full/A3_0.005/froc_gradcam_layer8 \
+  --output_dir results/anatomy_prior_screening_full/A3_0.001/froc_gradcam_layer8 \
   --label Cardiomegaly \
   --cam_key cam_vis_up \
   --threshold 0.50 \
