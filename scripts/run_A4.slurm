@@ -23,12 +23,17 @@ export OMP_NUM_THREADS=1
 export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 export HF_HOME=/home/woody/iwi5/iwi5362h/.cache/huggingface
 
+# Important: unique port for each distributed job
+export MASTER_PORT=$((10000 + SLURM_JOB_ID % 50000))
+echo "MASTER_PORT: $MASTER_PORT"
+
 cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
 mkdir -p ./output_anatomy_A4_cls_preserve_01
 
 python -u -m torch.distributed.launch \
     --nproc_per_node=2 \
+    --master_port=$MASTER_PORT \
     --use_env \
     Pretrain_anatomy_prior_A4.py \
     --config ./configs/Pretrain_anatomy_prior_A4.yaml \
