@@ -1,12 +1,12 @@
 #!/bin/bash -l
 #
-#SBATCH --job-name=zero_shot_A4_cls_0.5
+#SBATCH --job-name=zero_shot_A4_cls_0.1
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:1          # 1 x A40
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/zero_shot_A4_cls_0.5_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/zero_shot_A4_cls_0.5_%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/zero_shot_A4_cls_0.1_%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/zero_shot_A4_cls_0.1_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -32,10 +32,10 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 python -u scripts/zero_shot_eval_vindr.py \
   --config configs/Pretrain_anatomy_prior_A4.yaml \
   --checkpoints \
-    output_anatomy_A4_cls_preserve/checkpoint_best.pth \
+    output_anatomy_A4_cls_preserve_01/checkpoint_best.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir results/anatomy_prior_screening_full/A4_0.5/zero_shot \
+  --output_dir results/anatomy_prior_screening_full/A4_0.1/zero_shot \
   --save_scores \
   --save_scores_csv
 
