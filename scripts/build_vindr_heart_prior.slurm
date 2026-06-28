@@ -24,7 +24,7 @@ conda activate albef-notebook
 # -----------------------------
 cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
-SCRIPT_PATH="build_vindr_heart_prior_xrv.py"
+SCRIPT_PATH="scripts/build_vindr_heart_prior_xrv.py"
 
 # Change these paths if your VinDr train paths are different
 VINDR_TRAIN_IMAGES="/home/woody/iwi5/iwi5362h/data/vindr_cxr/train"
