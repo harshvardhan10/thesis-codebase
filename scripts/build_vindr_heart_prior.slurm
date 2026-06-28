@@ -13,6 +13,9 @@ echo "Job started on: $(date)"
 echo "Running on node: $(hostname)"
 echo "SLURM_JOB_ID: ${SLURM_JOB_ID}"
 
+export http_proxy=http://proxy.nhr.fau.de:80
+export https_proxy=http://proxy.nhr.fau.de:80
+
 # -----------------------------
 # Environment
 # -----------------------------
