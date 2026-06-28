@@ -1,10 +1,9 @@
 #!/bin/bash -l
 #SBATCH --job-name=cxr-orientation-qc
 #SBATCH --partition=a40
+#SBATCH --gres=gpu:a40:2
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=64G
 #SBATCH --output=/home/woody/iwi5/iwi5362h/logs/cxr_orientation_qc_%j.out
 #SBATCH --error=/home/woody/iwi5/iwi5362h/logs/cxr_orientation_qc_%j.err
 #SBATCH --mail-type=END,FAIL
