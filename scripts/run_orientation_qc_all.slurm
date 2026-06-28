@@ -45,11 +45,11 @@ MIMIC_IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/mimic_cxr/extracted/2.1.0"
 MIMIC_JSON="${PROJECT_DIR}/data/mimic_cxr.json"
 
 # VinDr train
-VINDR_TRAIN_IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr-cxr/png/train"
+VINDR_TRAIN_IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr-cxr/train"
 VINDR_TRAIN_CSV="/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_train.csv"
 
 # VinDr test
-VINDR_TEST_IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr-cxr/png/test"
+VINDR_TEST_IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr-cxr/test"
 VINDR_TEST_CSV="/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv"
 
 # Output directory
