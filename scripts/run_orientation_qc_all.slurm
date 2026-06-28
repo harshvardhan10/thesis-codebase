@@ -23,7 +23,7 @@ echo "============================================================"
 # ------------------------------------------------------------
 unset PYTHONPATH
 
-source ~/.bashrc
+module load python
 conda activate albef-notebook
 
 export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
