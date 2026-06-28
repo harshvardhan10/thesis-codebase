@@ -9,7 +9,7 @@
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
-set -euo pipefail
+unset SLURM_EXPORT_ENV
 
 echo "============================================================"
 echo "Starting CXR orientation QC"
@@ -21,10 +21,11 @@ echo "============================================================"
 # ------------------------------------------------------------
 # Environment
 # ------------------------------------------------------------
-unset PYTHONPATH
-
 module load python
 conda activate albef-notebook
+
+export PYTHONUNBUFFERED=1
+export OMP_NUM_THREADS=1
 
 # ------------------------------------------------------------
 # Project paths
