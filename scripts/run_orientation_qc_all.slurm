@@ -26,11 +26,6 @@ unset PYTHONPATH
 module load python
 conda activate albef-notebook
 
-export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
-export MKL_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
-export OPENBLAS_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
-export NUMEXPR_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
-
 # ------------------------------------------------------------
 # Project paths
 # ------------------------------------------------------------
