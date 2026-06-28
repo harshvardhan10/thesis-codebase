@@ -31,9 +31,10 @@ cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
 mkdir -p ./output_anatomy_A5_patch_head_cm_lambda_0.01
 
-torchrun \
+python -u -m torch.distributed.launch \
   --nproc_per_node=2 \
   --master_port=$MASTER_PORT \
+  --use_env \
   Pretrain_anatomy_prior_A5_patch_head.py \
   --config ./configs/Pretrain_A5_patch_head.yaml \
   --output_dir ./output_anatomy_A5_patch_head_cm_lambda_0.01 \
