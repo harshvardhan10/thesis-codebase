@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=cxr-orientation-qc
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:2
+#SBATCH --gres=gpu:a40:1
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --output=/home/woody/iwi5/iwi5362h/logs/cxr_orientation_qc_%j.out
