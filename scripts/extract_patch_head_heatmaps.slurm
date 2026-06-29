@@ -32,7 +32,7 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 python -u scripts/extract_patch_head_heatmaps.py \
   --config configs/Pretrain_A5_patch_head.yaml \
   --checkpoint \
-    output_anatomy_A5_patch_head_cm_lambda_0.01/checkpoint_best.pth \ \
+    output_anatomy_A5_patch_head_cm_lambda_0.01/checkpoint_best.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
   --output_dir results/anatomy_prior_screening_full/A5_lambda_0.01/patch_head_heatmaps \
