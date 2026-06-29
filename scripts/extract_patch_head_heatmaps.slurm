@@ -1,12 +1,12 @@
 #!/bin/bash -l
 #
-#SBATCH --job-name=extract_patch_head_heatmaps_A5_0.01
+#SBATCH --job-name=extract_patch_head_heatmaps_A5_0.01_ckpt_last
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:1
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/extract_patch_head_heatmaps_A5_0.01_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/extract_patch_head_heatmaps_A5_0.01_%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/extract_patch_head_heatmaps_A5_0.01_ckpt_last_%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/extract_patch_head_heatmaps_A5_0.01_ckpt_last_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -32,10 +32,10 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 python -u scripts/extract_patch_head_heatmaps.py \
   --config configs/Pretrain_A5_patch_head.yaml \
   --checkpoint \
-    output_anatomy_A5_patch_head_cm_lambda_0.01/checkpoint_best.pth \
+    output_anatomy_A5_patch_head_cm_lambda_0.01/checkpoint_last.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir results/anatomy_prior_screening_full/A5_lambda_0.01/patch_head_heatmaps \
+  --output_dir results/anatomy_prior_screening_full/A5_lambda_0.01/patch_head_heatmaps_ckpt_last \
   --only_labels Cardiomegaly \
   --layers_to_use 8 \
   --device cuda \
