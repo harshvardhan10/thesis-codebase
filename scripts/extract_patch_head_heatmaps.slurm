@@ -2,7 +2,7 @@
 #
 #SBATCH --job-name=extract_patch_head_heatmaps_A5_0.01_ckpt_best
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:1
+#SBATCH --gres=gpu:a40:2
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
 #SBATCH --output=/home/woody/iwi5/iwi5362h/logs/extract_patch_head_heatmaps_A5_0.01_ckpt_best_%j.out
