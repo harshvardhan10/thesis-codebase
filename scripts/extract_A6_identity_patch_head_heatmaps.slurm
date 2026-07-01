@@ -29,8 +29,6 @@ echo "MASTER_PORT: $MASTER_PORT"
 
 cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
-mkdir -p
-
 python -u -m torch.distributed.launch \
   --nproc_per_node=2 \
   --master_port=$MASTER_PORT \
