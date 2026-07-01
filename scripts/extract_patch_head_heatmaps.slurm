@@ -58,7 +58,6 @@ python -u -m torch.distributed.launch \
   --batch_size 32 \
   --num_workers 4 \
   --device cuda \
-  --overwrite \
   --no_save_attn_debug
 
 echo "Job finished at $(date)"
