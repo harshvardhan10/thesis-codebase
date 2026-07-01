@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=albef-A3-heart-prior-lamda-0.01
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:4
+#SBATCH --gres=gpu:a40:2
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_A3_heart_prior_lamda_0.01_%j.out
@@ -28,7 +28,7 @@ cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 mkdir -p ./output_anatomy_A3_subset
 
 python -u -m torch.distributed.launch \
-    --nproc_per_node=4 \
+    --nproc_per_node=2 \
     --use_env \
     Pretrain_anatomy_prior.py \
     --config ./configs/Pretrain_anatomy_prior_A3.yaml \
