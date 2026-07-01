@@ -1,11 +1,11 @@
 #!/bin/bash -l
-#SBATCH --job-name=albef-A3-full-lamda-0.001
+#SBATCH --job-name=albef-A3-heart-prior-lamda-0.01
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:4
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_A3_0.001_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_A3_0.001_%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_A3_heart_prior_lamda_0.01_%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_A3_heart_prior_lamda_0.01_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -32,6 +32,6 @@ python -u -m torch.distributed.launch \
     --use_env \
     Pretrain_anatomy_prior.py \
     --config ./configs/Pretrain_anatomy_prior_A3.yaml \
-    --output_dir ./output_anatomy_A3_lamda_0.001
+    --output_dir ./output_anatomy_A3_heart_prior_lamda_0.01
 
 echo "Job finished at $(date)"
