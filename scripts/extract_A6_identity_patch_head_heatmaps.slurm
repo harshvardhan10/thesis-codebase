@@ -1,11 +1,11 @@
 #!/bin/bash -l
-#SBATCH --job-name=albef-A5-patch-head-cm-lambda-0
+#SBATCH --job-name=albef-A6-sanity
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:2
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_A5_patch_head_lambda_0_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_A5_patch_head_lambda_0_%j.err
+#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/albef_A6_sanity_%j.out
+#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/albef_A6_sanity_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -33,9 +33,9 @@ python -u -m torch.distributed.launch \
   --nproc_per_node=2 \
   --master_port=$MASTER_PORT \
   --use_env \
-  scripts/extract_a6_0_identity_patch_head_heatmaps.py \
-  --config ./configs/Pretrain_A5_patch_head.yaml \
-  --checkpoint ./output_A0/checkpoint_best.pth \
+  extract_a6_0_identity_patch_head_heatmaps.py \
+  --config configs/Pretrain_A5_patch_head.yaml \
+  --checkpoint output_A0/checkpoint_best.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
   --output_dir results/anatomy_prior_screening_full/A6.0/patch_head_heatmaps \
