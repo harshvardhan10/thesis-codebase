@@ -28,7 +28,7 @@ echo "MASTER_PORT: $MASTER_PORT"
 cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
-OUT=./output_A6_1_frozen_A0_patch_head_cm_lambda_0.01_beta_0.1
+OUT=./output_A6_1_frozen_A0_patch_head_cm_lambda_0.01_beta_0
 A0_CKPT=./output_anatomy_A0_full/checkpoint_best.pth
 mkdir -p "$OUT"
 
