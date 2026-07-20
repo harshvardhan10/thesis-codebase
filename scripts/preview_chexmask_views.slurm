@@ -4,8 +4,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=2G
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/chexmask_preview_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/chexmask_preview_%j.err
+#SBATCH --output=/home/vault/iwi5/iwi5362h/logs/chexmask_preview_%j.out
+#SBATCH --error=/home/vault/iwi5/iwi5362h/logs/chexmask_preview_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
