@@ -83,7 +83,7 @@ echo
 echo "[3/3] Validating manifest against node-local database..."
 START_VALIDATE="$(date +%s)"
 
-python -u scripts/filter_chexmask_valid_manifest_fast.py \
+python -u scripts/filter_chexmask_valid_manifest.py \
     --manifest data/mimic_cxr.json \
     --chexmask_db "${LOCAL_DB}" \
     --output_dir "${OUTPUT_DIR}" \
