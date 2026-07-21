@@ -10,15 +10,17 @@
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
 set -euo pipefail
-
+module load python
 # ---------------------------------------------------------------------------
 # Compute-node internet access
 # ---------------------------------------------------------------------------
 PROXY="http://proxy.nhr.fau.de:80"
+
 export http_proxy="${PROXY}"
 export https_proxy="${PROXY}"
 export HTTP_PROXY="${PROXY}"
 export HTTPS_PROXY="${PROXY}"
+
 unset all_proxy ALL_PROXY no_proxy NO_PROXY
 
 # ---------------------------------------------------------------------------
@@ -27,61 +29,178 @@ unset all_proxy ALL_PROXY no_proxy NO_PROXY
 ROOT="/home/vault/iwi5/iwi5362h/data/bone_suppression/gl_lcm"
 REPO_DIR="${ROOT}/GL-LCM"
 CHECKPOINT_DIR="${ROOT}/checkpoints"
-TOOLS_VENV="${ROOT}/download_tools_venv"
+
+# New Conda environment. The old download_tools_venv is no longer used.
+TOOLS_ENV="${ROOT}/download_tools_conda_env"
+
+# Keep Conda and pip caches outside the limited home filesystem.
+CONDA_PKGS_DIRS="${ROOT}/conda_package_cache"
+export CONDA_PKGS_DIRS
+export PIP_NO_CACHE_DIR=1
+
+mkdir -p \
+    "${ROOT}" \
+    "${CHECKPOINT_DIR}" \
+    "${CONDA_PKGS_DIRS}" \
+    /home/woody/iwi5/iwi5362h/logs
 
 echo "======================================================================"
 echo "GL-LCM setup"
-echo "Host:             $(hostname)"
-echo "Started:          $(date --iso-8601=seconds)"
-echo "Root:             ${ROOT}"
-echo "Repository:       ${REPO_DIR}"
-echo "Checkpoint dir:   ${CHECKPOINT_DIR}"
-echo "Proxy:            ${HTTPS_PROXY}"
+echo "Host:                    $(hostname)"
+echo "Started:                 $(date --iso-8601=seconds)"
+echo "Root:                    ${ROOT}"
+echo "Repository:              ${REPO_DIR}"
+echo "Checkpoint directory:    ${CHECKPOINT_DIR}"
+echo "Conda environment:       ${TOOLS_ENV}"
+echo "Conda package cache:     ${CONDA_PKGS_DIRS}"
+echo "Proxy:                   ${HTTPS_PROXY}"
 echo "======================================================================"
 
 # ---------------------------------------------------------------------------
-# Clone/update the official repository
+# Find and initialize Conda
 # ---------------------------------------------------------------------------
-if [[ -d "${REPO_DIR}/.git" ]]; then
-    echo "[Git] Existing repository found; updating."
-    git -C "${REPO_DIR}" fetch --all --prune
-    git -C "${REPO_DIR}" pull --ff-only
-else
-    echo "[Git] Cloning official GL-LCM repository."
-    git clone \
-        "https://github.com/diaoquesang/GL-LCM.git" \
-        "${REPO_DIR}"
+if ! command -v conda >/dev/null 2>&1; then
+    echo "[Conda] 'conda' is not currently available in PATH."
+
+    CONDA_CANDIDATES=(
+        "${HOME}/miniconda3/bin/conda"
+        "${HOME}/anaconda3/bin/conda"
+        "${HOME}/miniforge3/bin/conda"
+        "${HOME}/mambaforge/bin/conda"
+    )
+
+    CONDA_FOUND=""
+
+    for candidate in "${CONDA_CANDIDATES[@]}"; do
+        if [[ -x "${candidate}" ]]; then
+            CONDA_FOUND="${candidate}"
+            break
+        fi
+    done
+
+    if [[ -z "${CONDA_FOUND}" ]]; then
+        echo "[Error] Conda could not be found."
+        echo
+        echo "Load the cluster's Conda module before submitting, or add the"
+        echo "correct Conda executable path to CONDA_CANDIDATES."
+        echo
+        echo "Available modules containing conda/anaconda/miniconda:"
+        module avail 2>&1 | grep -Ei "conda|anaconda|miniconda|miniforge" || true
+        exit 1
+    fi
+
+    export PATH="$(dirname "${CONDA_FOUND}"):${PATH}"
+fi
+
+CONDA_BASE="$(conda info --base)"
+CONDA_SH="${CONDA_BASE}/etc/profile.d/conda.sh"
+
+if [[ ! -f "${CONDA_SH}" ]]; then
+    echo "[Error] Conda initialization script not found: ${CONDA_SH}"
+    exit 1
+fi
+
+# shellcheck disable=SC1090
+source "${CONDA_SH}"
+
+echo
+echo "[Conda] Executable: $(command -v conda)"
+echo "[Conda] Base:       ${CONDA_BASE}"
+echo "[Conda] Version:    $(conda --version)"
+
+# ---------------------------------------------------------------------------
+# Verify the already-cloned repository
+# ---------------------------------------------------------------------------
+if [[ ! -d "${REPO_DIR}/.git" ]]; then
+    echo "[Error] GL-LCM repository was not found at:"
+    echo "        ${REPO_DIR}"
+    echo
+    echo "This setup script assumes that the repository has already been cloned."
+    exit 1
 fi
 
 echo
-echo "[Git] Current revision"
+echo "[Git] Existing GL-LCM repository found."
+echo "[Git] Current revision:"
 git -C "${REPO_DIR}" rev-parse HEAD
+
+echo "[Git] Working-tree status:"
 git -C "${REPO_DIR}" status --short
 
 # ---------------------------------------------------------------------------
-# Lightweight isolated environment used only for Google Drive downloads
+# Create a lightweight Conda environment for checkpoint downloads
 # ---------------------------------------------------------------------------
-if [[ ! -x "${TOOLS_VENV}/bin/python" ]]; then
-    echo "[Setup] Creating download-tools virtual environment."
-    python3 -m venv "${TOOLS_VENV}"
+if [[ -d "${TOOLS_ENV}" && ! -x "${TOOLS_ENV}/bin/python" ]]; then
+    echo
+    echo "[Conda] Incomplete or invalid environment found:"
+    echo "        ${TOOLS_ENV}"
+    echo "[Conda] Removing it before recreation."
+    rm -rf "${TOOLS_ENV}"
 fi
 
-"${TOOLS_VENV}/bin/python" -m pip install \
+if [[ ! -x "${TOOLS_ENV}/bin/python" ]]; then
+    echo
+    echo "[Conda] Creating download-tools environment."
+
+    conda create \
+        --yes \
+        --prefix "${TOOLS_ENV}" \
+        python=3.10 \
+        pip
+else
+    echo
+    echo "[Conda] Existing download-tools environment found."
+fi
+
+echo
+echo "[Conda] Environment information:"
+
+conda run \
+    --no-capture-output \
+    --prefix "${TOOLS_ENV}" \
+    python -c \
+    'import sys; print("Python executable:", sys.executable); print("Python version:", sys.version)'
+
+# ---------------------------------------------------------------------------
+# Install gdown
+# ---------------------------------------------------------------------------
+echo
+echo "[Setup] Installing/updating pip and gdown."
+
+conda run \
+    --no-capture-output \
+    --prefix "${TOOLS_ENV}" \
+    python -m pip install \
     --upgrade \
+    --no-cache-dir \
     pip \
     gdown
 
+echo
+echo "[Setup] Installed gdown version:"
+
+conda run \
+    --no-capture-output \
+    --prefix "${TOOLS_ENV}" \
+    python -c \
+    'import gdown; print(gdown.__version__)'
+
 # ---------------------------------------------------------------------------
-# Download all official released checkpoints.
+# Download all official released checkpoints
 #
-# We retain both checkpoint pairs because external MIMIC/VinDr generalization
-# must be evaluated with a small pilot before selecting one for full conversion.
-# gdown resume=True preserves partially downloaded files when the job restarts.
+# Both checkpoint pairs are retained because external MIMIC/VinDr
+# generalization should be evaluated with a pilot before selecting the model
+# used for the complete conversion.
 # ---------------------------------------------------------------------------
-"${TOOLS_VENV}/bin/python" - "${CHECKPOINT_DIR}" <<'PY'
+conda run \
+    --no-capture-output \
+    --prefix "${TOOLS_ENV}" \
+    python - "${CHECKPOINT_DIR}" <<'PY'
 from pathlib import Path
 import sys
+
 import gdown
+
 
 output_dir = Path(sys.argv[1])
 output_dir.mkdir(parents=True, exist_ok=True)
@@ -120,6 +239,7 @@ for model in models:
         )
         continue
 
+    print("=" * 70, flush=True)
     print(f"[Download] {model['description']}", flush=True)
     print(f"[Download] Google Drive ID: {model['file_id']}", flush=True)
     print(f"[Download] Output: {output_path}", flush=True)
@@ -131,20 +251,49 @@ for model in models:
         resume=True,
     )
 
-    if result is None or not output_path.exists() or output_path.stat().st_size == 0:
-        raise RuntimeError(f"Download failed for {model['description']}")
+    if (
+        result is None
+        or not output_path.exists()
+        or output_path.stat().st_size == 0
+    ):
+        raise RuntimeError(
+            f"Download failed for {model['description']}: {output_path}"
+        )
 
     print(
-        f"[Done] {output_path.name}: {output_path.stat().st_size:,} bytes",
+        f"[Done] {output_path.name}: "
+        f"{output_path.stat().st_size:,} bytes",
         flush=True,
     )
 PY
 
 # ---------------------------------------------------------------------------
+# Verify expected files before calculating checksums
+# ---------------------------------------------------------------------------
+EXPECTED_CHECKPOINTS=(
+    "vqgan_szch.pth"
+    "unet_szch.pth"
+    "vqgan_jsrt.pth"
+    "unet_jsrt.pth"
+)
+
+for checkpoint in "${EXPECTED_CHECKPOINTS[@]}"; do
+    checkpoint_path="${CHECKPOINT_DIR}/${checkpoint}"
+
+    if [[ ! -s "${checkpoint_path}" ]]; then
+        echo "[Error] Missing or empty checkpoint: ${checkpoint_path}"
+        exit 1
+    fi
+done
+
+# ---------------------------------------------------------------------------
 # Record local checksums for transfer/integrity tracking.
-# The repository does not publish reference SHA256 values in its README.
+#
+# The repository does not publish reference SHA256 values, so these hashes are
+# local integrity records rather than comparisons with official checksums.
 # ---------------------------------------------------------------------------
 cd "${CHECKPOINT_DIR}"
+
 sha256sum \
     vqgan_szch.pth \
     unet_szch.pth \
@@ -156,10 +305,25 @@ echo
 echo "======================================================================"
 echo "Downloaded checkpoints"
 echo "======================================================================"
+
 ls -lh "${CHECKPOINT_DIR}"
+
 echo
+echo "Local SHA256 checksums:"
 cat "${CHECKPOINT_DIR}/SHA256SUMS.local.txt"
+
 echo
+echo "Storage usage:"
 du -sh "${ROOT}"
+
+echo
+echo "Conda environment:"
+conda run \
+    --no-capture-output \
+    --prefix "${TOOLS_ENV}" \
+    python -c \
+    'import sys, gdown; print("Python:", sys.executable); print("gdown:", gdown.__version__)'
+
+echo
 echo "Finished: $(date --iso-8601=seconds)"
 echo "======================================================================"
