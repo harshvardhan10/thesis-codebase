@@ -21,7 +21,7 @@ VIEWS=(lung heart)
 VIEW="${VIEWS[$SLURM_ARRAY_TASK_ID]}"
 
 python -m torch.distributed.launch \
-  --nproc_per_node=4 \
+  --nproc_per_node=2 \
   --use_env \
   Pretrain_A0_chexmask.py \
   --config "configs/Pretrain_A0_${VIEW}_chexmask.yaml" \
