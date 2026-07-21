@@ -6,7 +6,6 @@
 #SBATCH --gres=gpu:a40:1
 #SBATCH --time=02:00:00
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=8G
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/chexmask_finalize_%j.out
 #SBATCH --error=/home/vault/iwi5/iwi5362h/logs/chexmask_finalize_%j.err
 #SBATCH --mail-type=END,FAIL

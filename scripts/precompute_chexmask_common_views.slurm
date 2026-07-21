@@ -6,7 +6,6 @@
 #SBATCH --gres=gpu:a40:1
 #SBATCH --time=12:00:00
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=24G
 #SBATCH --array=0-3
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/chexmask_precompute_%A_%a.out
 #SBATCH --error=/home/vault/iwi5/iwi5362h/logs/chexmask_precompute_%A_%a.err
