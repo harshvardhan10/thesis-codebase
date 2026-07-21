@@ -22,7 +22,7 @@ SOURCE_DB="/home/vault/iwi5/iwi5362h/data/chexmask/index/mimic_chexmask.sqlite"
 LOCAL_DB="${TMPDIR:-/tmp}/mimic_chexmask_${SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID}.sqlite"
 
 MANIFEST="${PROJECT_DIR}/data/chexmask_manifests/mimic_cxr_chexmask_common_valid.json"
-OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/data/chexmask/mask_cache/common"
+OUTPUT_ROOT="/home/woody/iwi5/iwi5362h/data/chexmask/mask_cache/common"
 STAGING_DIR="${OUTPUT_ROOT}/_staging"
 
 cd "${PROJECT_DIR}"

@@ -26,7 +26,7 @@ VIEWS=(lung heart)
 VIEW="${VIEWS[$SLURM_ARRAY_TASK_ID]}"
 
 BASE_CONFIG="configs/Pretrain_A0_${VIEW}_maskcache_common.yaml"
-SOURCE_MASK_ROOT="/home/vault/iwi5/iwi5362h/data/chexmask/mask_cache/common/${VIEW}"
+SOURCE_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/chexmask/mask_cache/common/${VIEW}"
 LOCAL_MASK_ROOT="${TMPDIR:-/tmp}/chexmask_mask_cache_${VIEW}_${SLURM_JOB_ID}"
 RUNTIME_CONFIG="${TMPDIR:-/tmp}/Pretrain_A0_${VIEW}_maskcache_runtime_${SLURM_JOB_ID}.yaml"
 

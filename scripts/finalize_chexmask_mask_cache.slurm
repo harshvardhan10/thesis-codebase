@@ -18,7 +18,7 @@ conda activate albef-notebook
 
 PROJECT_DIR="/home/woody/iwi5/iwi5362h/ALBEF"
 MANIFEST="${PROJECT_DIR}/data/chexmask_manifests/mimic_cxr_chexmask_common_valid.json"
-MASK_ROOT="/home/vault/iwi5/iwi5362h/data/chexmask/mask_cache/common"
+MASK_ROOT="/home/woody/iwi5/iwi5362h/data/chexmask/mask_cache/common"
 OUTPUT_DIR="${PROJECT_DIR}/data/chexmask_manifests"
 
 cd "${PROJECT_DIR}"
