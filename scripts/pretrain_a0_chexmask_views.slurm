@@ -25,7 +25,7 @@ python -m torch.distributed.launch \
   --use_env \
   Pretrain_A0_chexmask.py \
   --config "configs/Pretrain_A0_${VIEW}_chexmask.yaml" \
-  --output_dir "/home/vault/iwi5/iwi5362h/outputs/A0_${VIEW}_chexmask_debug" \
+  --output_dir "/home/vault/iwi5/iwi5362h/outputs/A0_${VIEW}_chexmask" \
   --checkpoint "" \
   --resume false \
   --auto_resume true \
