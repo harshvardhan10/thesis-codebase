@@ -1,7 +1,10 @@
 #!/bin/bash -l
 #SBATCH --job-name=chexmask-precompute
+#SBATCH --partition=a40
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --gres=gpu:a40:1
 #SBATCH --time=12:00:00
-#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=24G
 #SBATCH --array=0-3

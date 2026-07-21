@@ -1,7 +1,10 @@
 #!/bin/bash -l
 #SBATCH --job-name=chexmask-finalize
+#SBATCH --partition=a40
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --gres=gpu:a40:1
 #SBATCH --time=02:00:00
-#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=8G
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/chexmask_finalize_%j.out
