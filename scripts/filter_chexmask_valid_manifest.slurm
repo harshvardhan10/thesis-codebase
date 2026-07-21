@@ -40,7 +40,7 @@ if [[ ! -f "${SOURCE_DB}" ]]; then
     exit 2
 fi
 
-if [[ ! -f "scripts/filter_chexmask_valid_manifest_fast.py" ]]; then
+if [[ ! -f "scripts/filter_chexmask_valid_manifest.py" ]]; then
     echo "[ERROR] Missing validator script." >&2
     exit 3
 fi
