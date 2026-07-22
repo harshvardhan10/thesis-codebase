@@ -41,7 +41,7 @@ IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/test"
 LUNG_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/lung"
 HEART_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/heart"
 
-OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views"
+OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views_last_ckpt"
 
 BATCH_SIZE=64
 NUM_WORKERS=8
@@ -51,9 +51,9 @@ THRESHOLD=0.3948
 # Replace these checkpoint paths
 # ============================================================
 
-ORIGINAL_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_chexmask_common/checkpoint_best.pth"
-LUNG_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_chexmask_common/checkpoint_best.pth"
-HEART_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_chexmask_common/checkpoint_best.pth"
+ORIGINAL_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_chexmask_common/checkpoint_last.pth"
+LUNG_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_chexmask_common/checkpoint_last.pth"
+HEART_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_chexmask_common/checkpoint_last.pth"
 
 # ============================================================
 # Select evaluation from array index
