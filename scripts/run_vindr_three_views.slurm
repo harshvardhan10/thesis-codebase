@@ -27,6 +27,7 @@ export TOKENIZERS_PARALLELISM=false
 export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
 export MKL_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
 export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
+export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
 
 # ============================================================
 # Shared paths and settings
@@ -61,14 +62,14 @@ HEART_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_chexmask_common/che
 case "${SLURM_ARRAY_TASK_ID}" in
     0)
         VIEW_NAME="original"
-        SCRIPT="scripts/zero_shot_eval_vindr.py"
+        SCRIPT="${PROJECT_ROOT}/scripts/zero_shot_eval_vindr.py"
         CHECKPOINT="${ORIGINAL_CHECKPOINT}"
         OUTPUT_DIR="${OUTPUT_ROOT}/original"
         ;;
 
     1)
         VIEW_NAME="lung"
-        SCRIPT="scripts/zero_shot_eval_vindr_maskcache.py"
+        SCRIPT="${PROJECT_ROOT}/scripts/zero_shot_eval_vindr_maskcache.py"
         CHECKPOINT="${LUNG_CHECKPOINT}"
         MASK_ROOT="${LUNG_MASK_ROOT}"
         OUTPUT_DIR="${OUTPUT_ROOT}/lung"
@@ -76,7 +77,7 @@ case "${SLURM_ARRAY_TASK_ID}" in
 
     2)
         VIEW_NAME="heart"
-        SCRIPT="scripts/zero_shot_eval_vindr_maskcache.py"
+        SCRIPT="${PROJECT_ROOT}/scripts/zero_shot_eval_vindr_maskcache.py"
         CHECKPOINT="${HEART_CHECKPOINT}"
         MASK_ROOT="${HEART_MASK_ROOT}"
         OUTPUT_DIR="${OUTPUT_ROOT}/heart"
