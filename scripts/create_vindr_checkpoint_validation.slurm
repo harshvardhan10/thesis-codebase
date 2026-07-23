@@ -1,6 +1,5 @@
 #!/bin/bash -l
 #SBATCH --job-name=vindr-val-setup
-#SBATCH --partition=a40
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
