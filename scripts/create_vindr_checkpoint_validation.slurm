@@ -1,5 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=vindr-val-setup
+#SBATCH --partition=a40
+#SBATCH --gres=gpu:a40:2
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
