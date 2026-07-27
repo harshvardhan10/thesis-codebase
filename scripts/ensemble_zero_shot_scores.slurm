@@ -31,12 +31,12 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
 python scripts/ensemble_zero_shot_scores.py \
     --score_files \
-        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views/original/vindr_zero_shot_scores_checkpoint_best.npz \
-        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views/lung/vindr_zero_shot_scores_lung_checkpoint_best.npz \
-        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views/heart/vindr_zero_shot_scores_heart_checkpoint_best.npz \
+        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views_last_ckpt/original/vindr_zero_shot_scores_checkpoint_last.npz \
+        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views_last_ckpt/lung/vindr_zero_shot_scores_lung_checkpoint_last.npz \
+        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views_last_ckpt/heart/vindr_zero_shot_scores_heart_checkpoint_last.npz \
     --model_names original lung heart \
     --output_dir /home/vault/iwi5/iwi5362h/outputs/ensemble/pretrain_based_only \
-    --ensemble_name best_loss \
+    --ensemble_name last_ckpt \
     --threshold 0.3948 \
     --save_scores_csv
 
