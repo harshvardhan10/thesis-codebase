@@ -32,8 +32,8 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 python scripts/ensemble_zero_shot_scores.py \
     --score_files \
         /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/val_auc_ckpt/original/vindr_zero_shot_scores_checkpoint_best_macro_auc_stable.npz \
-        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/val_auc_ckpt/lung/vindr_zero_shot_scores_checkpoint_best_macro_auc_stable.npz \
-        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/val_auc_ckpt/heart/vindr_zero_shot_scores_checkpoint_best_macro_auc_stable.npz \
+        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/val_auc_ckpt/lung/vindr_zero_shot_scores_lung_checkpoint_best_macro_auc_stable.npz \
+        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/val_auc_ckpt/heart/vindr_zero_shot_scores_heart_checkpoint_best_macro_auc_stable.npz \
     --model_names original lung heart \
     --output_dir /home/vault/iwi5/iwi5362h/outputs/ensemble/stable \
     --ensemble_name stable \
