@@ -33,7 +33,7 @@ export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
 # Shared paths and settings
 # ============================================================
 
-CONFIG="${PROJECT_ROOT}/configs/Pretrain_A0_lung_maskcache_common.yaml"
+CONFIG="${PROJECT_ROOT}/configs/Pretrain_A0_original_dual_auc.yaml"
 
 LABELS_CSV="/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv"
 IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/test"
@@ -41,7 +41,7 @@ IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/test"
 LUNG_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/lung"
 HEART_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/heart"
 
-OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views_last_ckpt"
+OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/val_auc_ckpt"
 
 BATCH_SIZE=64
 NUM_WORKERS=8
@@ -51,9 +51,9 @@ THRESHOLD=0.3948
 # Replace these checkpoint paths
 # ============================================================
 
-ORIGINAL_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_chexmask_common/checkpoint_last.pth"
-LUNG_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_chexmask_common/checkpoint_last.pth"
-HEART_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_chexmask_common/checkpoint_last.pth"
+ORIGINAL_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_macro_auc_stable.pth"
+LUNG_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_macro_auc_stable.pth"
+HEART_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_macro_auc_stable.pth"
 
 # ============================================================
 # Select evaluation from array index
