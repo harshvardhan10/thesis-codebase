@@ -41,7 +41,7 @@ IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/test"
 LUNG_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/lung"
 HEART_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/heart"
 
-OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/val_auc_ckpt"
+OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt"
 
 BATCH_SIZE=64
 NUM_WORKERS=8
@@ -51,9 +51,9 @@ THRESHOLD=0.3948
 # Replace these checkpoint paths
 # ============================================================
 
-ORIGINAL_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_macro_auc_stable.pth"
-LUNG_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_macro_auc_stable.pth"
-HEART_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_macro_auc_stable.pth"
+ORIGINAL_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
+LUNG_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
+HEART_CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
 
 # ============================================================
 # Select evaluation from array index
