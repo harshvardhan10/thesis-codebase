@@ -31,12 +31,12 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
 python scripts/ensemble_zero_shot_scores.py \
     --score_files \
-        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt/original/vindr_zero_shot_scores_checkpoint_best_cardiomegaly_auc.npz \
-        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt/lung/vindr_zero_shot_scores_lung_checkpoint_best_cardiomegaly_auc.npz \
-        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt/heart/vindr_zero_shot_scores_heart_checkpoint_best_cardiomegaly_auc.npz \
+        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views/original/vindr_zero_shot_scores_checkpoint_best.npz \
+        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views/lung/vindr_zero_shot_scores_lung_checkpoint_best.npz \
+        /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_three_views/heart/vindr_zero_shot_scores_heart_checkpoint_best.npz \
     --model_names original lung heart \
-    --output_dir /home/vault/iwi5/iwi5362h/outputs/ensemble/stable \
-    --ensemble_name cardiomegaly \
+    --output_dir /home/vault/iwi5/iwi5362h/outputs/ensemble/pretrain_based_only \
+    --ensemble_name best_loss \
     --threshold 0.3948 \
     --save_scores_csv
 
