@@ -18,8 +18,8 @@ conda activate albef-notebook
 
 PROJECT_DIR="/home/woody/iwi5/iwi5362h/ALBEF"
 
-# The fixed 500-image validation split created earlier.
-VINDR_LABELS="/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/checkpoint_validation/cardiomegaly_labels.csv"
+# The fixed 2000-image validation split.
+VINDR_LABELS="/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/checkpoint_validation_2000/multilabel_labels.csv"
 
 # Your resized 256x256 VinDr training PNGs.
 VINDR_IMAGES="/home/woody/iwi5/iwi5362h/data/vindr_cxr/train"
@@ -28,17 +28,17 @@ VINDR_IMAGES="/home/woody/iwi5/iwi5362h/data/vindr_cxr/train"
 CHEXMASK_CSV="/home/vault/iwi5/iwi5362h/data/chexmask/OriginalResolution/VinDr-CXR.csv"
 
 # Separate filtered database for only these 500 validation images.
-CHEXMASK_DB="/home/vault/iwi5/iwi5362h/data/chexmask/index/vindr_checkpoint_val_chexmask.sqlite"
+CHEXMASK_DB="/home/vault/iwi5/iwi5362h/data/chexmask/index/vindr_checkpoint_val_2000_chexmask.sqlite"
 LOCAL_DB="${TMPDIR:-/tmp}/vindr_checkpoint_val_chexmask_${SLURM_JOB_ID}.sqlite"
 
 # Manifest containing only the selected validation image IDs and PNG paths.
-MANIFEST="${PROJECT_DIR}/data/chexmask_manifests/vindr_checkpoint_val_chexmask.json"
+MANIFEST="${PROJECT_DIR}/data/chexmask_manifests/vindr_checkpoint_val_2000_chexmask.json"
 
 # Masks will be saved here.
 OUTPUT_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/train"
 
 # Use a separate staging directory for this validation run.
-STAGING_DIR="${OUTPUT_ROOT}/_staging_checkpoint_val"
+STAGING_DIR="${OUTPUT_ROOT}/_staging_checkpoint_val_2000"
 
 FINAL_MANIFEST_DIR="${PROJECT_DIR}/data/chexmask_manifests"
 
