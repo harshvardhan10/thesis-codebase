@@ -48,8 +48,8 @@ CHECKPOINTS=(
 # original does not use a mask, so its entry is empty.
 MASK_ROOTS=(
   ""
-  "/home/woody/iwi5/iwi5362h/data/vindr_cxr/lung_masks"
-  "/home/woody/iwi5/iwi5362h/data/vindr_cxr/heart_masks"
+  "/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/lung"
+  "/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/heart"
 )
 
 OUTPUT_DIRS=(
