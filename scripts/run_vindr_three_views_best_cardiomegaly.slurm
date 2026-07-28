@@ -25,7 +25,7 @@ export MKL_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
 export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
 
-LABELS_CSV="/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv"
+LABELS_CSV="/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test_canonical.csv"
 IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/test"
 
 LUNG_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/lung"
