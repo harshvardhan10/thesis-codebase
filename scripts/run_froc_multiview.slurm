@@ -24,7 +24,6 @@ module load python
 conda activate albef-notebook
 
 export PYTHONUNBUFFERED=1
-export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
 
 PROJECT_ROOT=/home/woody/iwi5/iwi5362h/ALBEF
 RESULTS_ROOT="/home/vault/iwi5/iwi5362h/results/multiview/best_val_auc"
