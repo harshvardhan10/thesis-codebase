@@ -50,7 +50,7 @@ HEATMAP_DIR="${HEATMAP_DIRS[$SLURM_ARRAY_TASK_ID]}"
 OUTPUT_DIR="${RESULTS_ROOT}/froc_comparison/${MODEL_NAME}"
 
 ANNOTATIONS_CSV=/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/annotations_test.csv
-META_CSV=/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv
+META_CSV=/home/woody/iwi5/iwi5362h/data/vindr_cxr/test_meta.csv
 
 if [[ ! -f "${HEATMAP_DIR}/crossattn_gradcam_index.csv" ]]; then
     echo "ERROR: Missing heatmap index: ${HEATMAP_DIR}/crossattn_gradcam_index.csv" >&2
