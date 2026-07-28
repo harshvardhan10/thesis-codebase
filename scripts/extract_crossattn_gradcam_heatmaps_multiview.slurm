@@ -6,8 +6,8 @@
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
 #SBATCH --array=0-2
-#SBATCH --output=/home/vault/iwi5/iwi5362h/logs/extract_crossattn_multiview_pretrain_best_ckpt_%A_%a.out
-#SBATCH --error=/home/vault/iwi5/iwi5362h/logs/extract_crossattn_multiview_pretrain_best_ckpt_%A_%a.err
+#SBATCH --output=/home/vault/iwi5/iwi5362h/logs/extract_crossattn_multiview_pretrain_last_ckpt_%A_%a.out
+#SBATCH --error=/home/vault/iwi5/iwi5362h/logs/extract_crossattn_multiview_pretrain_last_ckpt_%A_%a.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -40,9 +40,9 @@ VIEWS=(
 )
 
 CHECKPOINTS=(
-  "/home/vault/iwi5/iwi5362h/outputs/A0_original_chexmask_common/checkpoint_best.pth"
-  "/home/vault/iwi5/iwi5362h/outputs/A0_lung_chexmask_common/checkpoint_best.pth"
-  "/home/vault/iwi5/iwi5362h/outputs/A0_heart_chexmask_common/checkpoint_best.pth"
+  "/home/vault/iwi5/iwi5362h/outputs/A0_original_chexmask_common/checkpoint_last.pth"
+  "/home/vault/iwi5/iwi5362h/outputs/A0_lung_chexmask_common/checkpoint_last.pth"
+  "/home/vault/iwi5/iwi5362h/outputs/A0_heart_chexmask_common/checkpoint_last.pth"
 )
 
 # original does not use a mask, so its entry is empty.
@@ -53,9 +53,9 @@ MASK_ROOTS=(
 )
 
 OUTPUT_DIRS=(
-  "/home/vault/iwi5/iwi5362h/results/multiview/pretrain_loss_best_ckpt/original/heatmaps_crossattn_gradcam_layer8"
-  "/home/vault/iwi5/iwi5362h/results/multiview/pretrain_loss_best_ckpt/lung_only/heatmaps_crossattn_gradcam_layer8"
-  "/home/vault/iwi5/iwi5362h/results/multiview/pretrain_loss_best_ckpt/heart_only/heatmaps_crossattn_gradcam_layer8"
+  "/home/vault/iwi5/iwi5362h/results/multiview/pretrain_loss_last_ckpt/original/heatmaps_crossattn_gradcam_layer8"
+  "/home/vault/iwi5/iwi5362h/results/multiview/pretrain_loss_last_ckpt/lung_only/heatmaps_crossattn_gradcam_layer8"
+  "/home/vault/iwi5/iwi5362h/results/multiview/pretrain_loss_last_ckpt/heart_only/heatmaps_crossattn_gradcam_layer8"
 )
 
 VIEW="${VIEWS[$SLURM_ARRAY_TASK_ID]}"
