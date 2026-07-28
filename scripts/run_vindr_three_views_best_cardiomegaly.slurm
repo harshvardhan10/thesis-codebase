@@ -31,7 +31,7 @@ IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/test"
 LUNG_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/lung"
 HEART_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/heart"
 
-OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt_threshold_tuned_val_set"
+OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_auc_ckpt_threshold_tuned_val_set"
 
 BATCH_SIZE=64
 NUM_WORKERS=8
@@ -47,8 +47,8 @@ case "${SLURM_ARRAY_TASK_ID}" in
         VIEW_NAME="original"
         CONFIG="${PROJECT_ROOT}/configs/Pretrain_A0_original_dual_auc.yaml"
         SCRIPT="${PROJECT_ROOT}/scripts/zero_shot_eval_vindr.py"
-        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
-        VALIDATION_SCORES="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/best_cardiomegaly_auc_scores.npz"
+        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_macro_auc_stable.pth"
+        VALIDATION_SCORES="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/best_macro_auc_stable_scores.npz"
         OUTPUT_DIR="${OUTPUT_ROOT}/original"
         ;;
 
@@ -56,8 +56,8 @@ case "${SLURM_ARRAY_TASK_ID}" in
         VIEW_NAME="lung"
         CONFIG="${PROJECT_ROOT}/configs/Pretrain_A0_lung_dual_auc.yaml"
         SCRIPT="${PROJECT_ROOT}/scripts/zero_shot_eval_vindr_maskcache.py"
-        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
-        VALIDATION_SCORES="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/best_cardiomegaly_auc_scores.npz"
+        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_macro_auc_stable.pth"
+        VALIDATION_SCORES="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/best_macro_auc_stable_scores.npz"
         MASK_ROOT="${LUNG_MASK_ROOT}"
         OUTPUT_DIR="${OUTPUT_ROOT}/lung"
         ;;
@@ -66,8 +66,8 @@ case "${SLURM_ARRAY_TASK_ID}" in
         VIEW_NAME="heart"
         CONFIG="${PROJECT_ROOT}/configs/Pretrain_A0_heart_dual_auc.yaml"
         SCRIPT="${PROJECT_ROOT}/scripts/zero_shot_eval_vindr_maskcache.py"
-        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
-        VALIDATION_SCORES="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/best_cardiomegaly_auc_scores.npz"
+        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_macro_auc_stable.pth"
+        VALIDATION_SCORES="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/best_macro_auc_stable_scores.npz"
         MASK_ROOT="${HEART_MASK_ROOT}"
         OUTPUT_DIR="${OUTPUT_ROOT}/heart"
         ;;

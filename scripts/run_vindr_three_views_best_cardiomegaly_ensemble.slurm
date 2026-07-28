@@ -26,12 +26,12 @@ export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
 ENSEMBLE_SCRIPT="${PROJECT_ROOT}/scripts/ensemble_zero_shot_scores.py"
 CONFIG="${PROJECT_ROOT}/configs/Pretrain_A0_original_dual_auc.yaml"
 
-INDIVIDUAL_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt_threshold_tuned_val_set"
-OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/ensemble/best_val_cardiomegaly_auc_ckpt_threshold_tuned_val_set"
+INDIVIDUAL_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_auc_ckpt_threshold_tuned_val_set"
+OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/ensemble/best_val_auc_ckpt_threshold_tuned_val_set"
 
-ORIGINAL_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/best_cardiomegaly_auc_scores.npz"
-LUNG_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/best_cardiomegaly_auc_scores.npz"
-HEART_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/best_cardiomegaly_auc_scores.npz"
+ORIGINAL_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/best_macro_auc_stable_scores.npz"
+LUNG_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/best_macro_auc_stable_scores.npz"
+HEART_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/best_macro_auc_stable_scores.npz"
 
 CHECKPOINT_STEM="checkpoint_best_cardiomegaly_auc"
 
