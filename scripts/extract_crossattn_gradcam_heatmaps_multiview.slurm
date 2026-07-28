@@ -6,8 +6,8 @@
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
 #SBATCH --array=0-2
-#SBATCH --output=/home/woody/iwi5/iwi5362h/logs/extract_crossattn_multiview_%A_%a.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/extract_crossattn_multiview_%A_%a.err
+#SBATCH --output=/home/vault/iwi5/iwi5362h/logs/extract_crossattn_multiview_%A_%a.out
+#SBATCH --error=/home/vault/iwi5/iwi5362h/logs/extract_crossattn_multiview_%A_%a.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
