@@ -30,10 +30,10 @@ cd "${PROJECT_ROOT}"
 export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
 
 # These must be the three completed extraction output directories.
-ORIGINAL_HEATMAPS="${RESULTS_ROOT}/original/heatmaps_crossattn_gradcam_layer8_ckpt_best"
-LUNG_HEATMAPS="${RESULTS_ROOT}/lung_only/heatmaps_crossattn_gradcam_layer8_ckpt_best"
-HEART_HEATMAPS="${RESULTS_ROOT}/heart_only/heatmaps_crossattn_gradcam_layer8_ckpt_best"
-ENSEMBLE_HEATMAPS="${RESULTS_ROOT}/ensemble_equal/heatmaps_crossattn_gradcam_layer8_ckpt_best"
+ORIGINAL_HEATMAPS="${RESULTS_ROOT}/original/heatmaps_crossattn_gradcam_layer8"
+LUNG_HEATMAPS="${RESULTS_ROOT}/lung_only/heatmaps_crossattn_gradcam_layer8"
+HEART_HEATMAPS="${RESULTS_ROOT}/heart_only/heatmaps_crossattn_gradcam_layer8"
+ENSEMBLE_HEATMAPS="${RESULTS_ROOT}/ensemble_equal/heatmaps_crossattn_gradcam_layer8"
 
 for heatmap_dir in \
     "${ORIGINAL_HEATMAPS}" \
