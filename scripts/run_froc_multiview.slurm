@@ -40,10 +40,10 @@ MODEL_NAMES=(
 )
 
 HEATMAP_DIRS=(
-    "${RESULTS_ROOT}/original/heatmaps_crossattn_gradcam_layer8_ckpt_best"
-    "${RESULTS_ROOT}/lung_only/heatmaps_crossattn_gradcam_layer8_ckpt_best"
-    "${RESULTS_ROOT}/heart_only/heatmaps_crossattn_gradcam_layer8_ckpt_best"
-    "${RESULTS_ROOT}/ensemble_equal/heatmaps_crossattn_gradcam_layer8_ckpt_best"
+    "${RESULTS_ROOT}/original/heatmaps_crossattn_gradcam_layer8_ckpt"
+    "${RESULTS_ROOT}/lung_only/heatmaps_crossattn_gradcam_layer8_ckpt"
+    "${RESULTS_ROOT}/heart_only/heatmaps_crossattn_gradcam_layer8_ckpt"
+    "${RESULTS_ROOT}/ensemble_equal/heatmaps_crossattn_gradcam_layer8_ckpt"
 )
 
 MODEL_NAME="${MODEL_NAMES[$SLURM_ARRAY_TASK_ID]}"
