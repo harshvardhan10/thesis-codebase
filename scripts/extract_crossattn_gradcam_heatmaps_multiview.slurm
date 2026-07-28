@@ -40,9 +40,9 @@ VIEWS=(
 )
 
 CHECKPOINTS=(
-  "/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
-  "/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
-  "/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
+  "/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_macro_auc_stable.pth"
+  "/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_macro_auc_stable.pth"
+  "/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_macro_auc_stable.pth"
 )
 
 # original does not use a mask, so its entry is empty.
@@ -53,9 +53,9 @@ MASK_ROOTS=(
 )
 
 OUTPUT_DIRS=(
-  "/home/vault/iwi5/iwi5362h/results/multiview/best_val_cardiomegaly_auc/original/heatmaps_crossattn_gradcam_layer8"
-  "/home/vault/iwi5/iwi5362h/results/multiview/best_val_cardiomegaly_auc/lung_only/heatmaps_crossattn_gradcam_layer8"
-  "/home/vault/iwi5/iwi5362h/results/multiview/best_val_cardiomegaly_auc/heart_only/heatmaps_crossattn_gradcam_layer8"
+  "/home/vault/iwi5/iwi5362h/results/multiview/best_val_auc/original/heatmaps_crossattn_gradcam_layer8"
+  "/home/vault/iwi5/iwi5362h/results/multiview/best_val_auc/lung_only/heatmaps_crossattn_gradcam_layer8"
+  "/home/vault/iwi5/iwi5362h/results/multiview/best_val_auc/heart_only/heatmaps_crossattn_gradcam_layer8"
 )
 
 VIEW="${VIEWS[$SLURM_ARRAY_TASK_ID]}"
