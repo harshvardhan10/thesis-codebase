@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=vindr-3view-cardio-eval
-#SBATCH --partition=rtx3080
-#SBATCH --gres=gpu:rtx3080:1
+#SBATCH --partition=a40
+#SBATCH --gres=gpu:a40:1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=06:00:00
 #SBATCH --array=0-2
