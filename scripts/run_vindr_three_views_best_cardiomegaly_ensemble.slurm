@@ -33,7 +33,7 @@ ORIGINAL_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/best
 LUNG_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/best_macro_auc_stable_scores.npz"
 HEART_VALIDATION="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/best_macro_auc_stable_scores.npz"
 
-CHECKPOINT_STEM="checkpoint_best_cardiomegaly_auc"
+CHECKPOINT_STEM="checkpoint_best_macro_auc_stable"
 
 # Resolve score filenames without assuming whether the masked evaluator inserts
 # "lung_" or "heart_" into its filename.
