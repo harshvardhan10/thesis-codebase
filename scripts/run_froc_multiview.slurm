@@ -26,7 +26,7 @@ conda activate albef-notebook
 export PYTHONUNBUFFERED=1
 
 PROJECT_ROOT=/home/woody/iwi5/iwi5362h/ALBEF
-RESULTS_ROOT="/home/vault/iwi5/iwi5362h/results/multiview/pretrain_loss_best_ckpt"
+RESULTS_ROOT="/home/vault/iwi5/iwi5362h/results/multiview/pretrain_loss_last_ckpt"
 
 cd "${PROJECT_ROOT}"
 export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
