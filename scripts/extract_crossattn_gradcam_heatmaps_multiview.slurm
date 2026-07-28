@@ -1,8 +1,8 @@
 #!/bin/bash -l
 #
 #SBATCH --job-name=extract_crossattn_multiview
-#SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:1
+#SBATCH --partition=rtx3080
+#SBATCH --gres=gpu:rtx3080:1
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
 #SBATCH --array=0-2
