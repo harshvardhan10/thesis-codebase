@@ -34,6 +34,7 @@ python -u scripts/compute_froc_from_gradcam_heatmaps_revised.py \
   --heatmaps_dir /home/vault/iwi5/iwi5362h/results/multiview/validation/original/heatmaps_crossattn_gradcam_layer8 \
   --evaluation_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/checkpoint_validation_2000/multilabel_labels.csv \
   --annotations_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/annotations_train.csv \
+  --meta_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/train_meta.csv \
   --output_dir /home/vault/iwi5/iwi5362h/results/multiview/validation \
   --label "Cardiomegaly" \
   --expected_view original \
