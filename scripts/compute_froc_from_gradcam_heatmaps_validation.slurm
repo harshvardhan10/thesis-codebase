@@ -6,7 +6,7 @@
 #SBATCH --time=08:00:00
 #SBATCH --ntasks=1
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/froc_from_heatmap_validation_%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/froc_from_heatmap_validation_%j.err
+#SBATCH --error=/home/vault/iwi5/iwi5362h/logs/froc_from_heatmap_validation_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
@@ -29,12 +29,12 @@ cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
 export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
-python -u scripts/compute_froc_from_gradcam_heatmaps_validation.py \
+python -u scripts/compute_froc_from_gradcam_heatmaps_revised.py \
   --mode validation \
   --heatmaps_dir /home/vault/iwi5/iwi5362h/results/multiview/validation/original/heatmaps_crossattn_gradcam_layer8 \
   --evaluation_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/checkpoint_validation_2000/multilabel_labels.csv \
   --annotations_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/annotations_train.csv \
-  --output_dir /home/vault/iwi5/iwi5362h/results/A0_validation_froc_search \
+  --output_dir /home/vault/iwi5/iwi5362h/results/multiview/validation \
   --label "Cardiomegaly" \
   --expected_view original \
   --expected_layer 8 \
