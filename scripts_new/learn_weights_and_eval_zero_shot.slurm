@@ -45,10 +45,10 @@ python scripts_new/learn_dual_checkpoint_ensemble_weights.py \
   --output_dir /home/vault/iwi5/iwi5362h/results/multiview/learned_weight_ensemble_results \
   --best_macro_test_files \
       /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_auc_ckpt_threshold_tuned_val_set/original/vindr_zero_shot_scores_checkpoint_best_macro_auc_stable.npz \
-      /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_auc_ckpt_threshold_tuned_val_set/lung/vindr_zero_shot_scores_checkpoint_best_macro_auc_stable.npz \
-      /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_auc_ckpt_threshold_tuned_val_set/heart/vindr_zero_shot_scores_checkpoint_best_macro_auc_stable.npz \
+      /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_auc_ckpt_threshold_tuned_val_set/lung/vindr_zero_shot_scores_lung_checkpoint_best_macro_auc_stable.npz \
+      /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_auc_ckpt_threshold_tuned_val_set/heart/vindr_zero_shot_scores_heart_checkpoint_best_macro_auc_stable.npz \
   --best_cardio_test_files \
     /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt_threshold_tuned_val_set/original/vindr_zero_shot_scores_checkpoint_best_cardiomegaly_auc.npz \
-      /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt_threshold_tuned_val_set/lung/vindr_zero_shot_scores_checkpoint_best_cardiomegaly_auc.npz \
-      /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt_threshold_tuned_val_set/heart/vindr_zero_shot_scores_checkpoint_best_cardiomegaly_auc.npz \
+      /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt_threshold_tuned_val_set/lung/vindr_zero_shot_scores_lung_checkpoint_best_cardiomegaly_auc.npz \
+      /home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot/best_val_cardiomegaly_auc_ckpt_threshold_tuned_val_set/heart/vindr_zero_shot_scores_heart_checkpoint_best_cardiomegaly_auc.npz \
 
