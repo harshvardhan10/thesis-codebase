@@ -18,9 +18,6 @@ module load python
 conda activate albef-notebook
 
 export PYTHONUNBUFFERED=1
-export TOKENIZERS_PARALLELISM=false
-export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
-export MKL_NUM_THREADS="${SLURM_CPUS_PER_TASK}"
 export TRANSFORMERS_CACHE=/home/woody/iwi5/iwi5362h/.cache/huggingface
 export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:-}"
 
