@@ -1,9 +1,8 @@
 #!/bin/bash -l
 #SBATCH --job-name=vindr-bare-3view
-#SBATCH --partition=rtx3080
-#SBATCH --gres=gpu:rtx3080:1
-#SBATCH --cpus-per-task=8
-#SBATCH --time=04:00:00
+#SBATCH --partition=a40
+#SBATCH --gres=gpu:a40:1
+#SBATCH --time=01:00:00
 #SBATCH --array=0-2
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/vindr_bare_3view_%A_%a.out
 #SBATCH --error=/home/vault/iwi5/iwi5362h/logs/vindr_bare_3view_%A_%a.err
