@@ -5,8 +5,8 @@
 #SBATCH --gres=gpu:a40:1
 #SBATCH --time=01:00:00
 #SBATCH --ntasks=1
-#SBATCH --output=/home/vault/iwi5/iwi5362h/logs/extract_albef_itc_gradcam%j.out
-#SBATCH --error=/home/woody/iwi5/iwi5362h/logs/extract_albef_itc_gradcam%j.err
+#SBATCH --output=/home/vault/iwi5/iwi5362h/logs/extract_albef_itc_gradcam_%j.out
+#SBATCH --error=/home/vault/iwi5/iwi5362h/logs/extract_albef_itc_gradcam_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
