@@ -40,7 +40,7 @@ TEST_HEART_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cac
 
 OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_bare_prompt_itc_val_calibrated"
 
-BARE_PROMPT_EVALUATOR="${PROJECT_ROOT}/scripts_new/zero_shot_eval_vindr_bare_prompts.py"
+BARE_PROMPT_EVALUATOR="${PROJECT_ROOT}/scripts_new/zero_shot_eval_vindr_pos_neg_bare_prompts.py"
 F1_EVALUATOR="${PROJECT_ROOT}/scripts/evaluate_zero_shot_f1_from_validation.py"
 
 BATCH_SIZE=64
