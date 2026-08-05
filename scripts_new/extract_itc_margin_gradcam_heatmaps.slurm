@@ -34,7 +34,7 @@ python -u scripts_new/extract_itc_margin_gradcam_heatmaps.py \
   --checkpoint /home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_macro_auc_stable.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test_canonical.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir /home/vault/iwi5/iwi5362h/results/heatmaps_itc_margin/original \
+  --output_dir /home/vault/iwi5/iwi5362h/results/heatmaps_itc_margin_layer_10/original \
   --device cuda \
   --view_type original \
   --target_labels Cardiomegaly "Pleural effusion" \
