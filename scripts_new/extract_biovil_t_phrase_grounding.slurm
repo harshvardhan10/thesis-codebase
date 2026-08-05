@@ -17,7 +17,7 @@ export PYTHONUNBUFFERED=1
 export HF_HOME=/home/woody/iwi5/iwi5362h/.cache/huggingface
 
 module load python
-conda activate biovil-t
+conda activate biovilt-clean
 
 cd /home/woody/iwi5/iwi5362h/ALBEF || exit 1
 
