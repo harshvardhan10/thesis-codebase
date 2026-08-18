@@ -34,7 +34,7 @@ TEST_IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/test"
 TEST_LUNG_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/lung"
 TEST_HEART_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cache/test/heart"
 
-OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_bare_prompt_itc_val_calibrated"
+OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_bare_prompt_itc_val_calibrated/best_cardiomegaly_auc_models"
 
 BARE_PROMPT_EVALUATOR="${PROJECT_ROOT}/scripts_new/zero_shot_eval_vindr_pos_neg_bare_prompts.py"
 F1_EVALUATOR="${PROJECT_ROOT}/scripts/evaluate_zero_shot_f1_from_validation.py"
@@ -46,17 +46,17 @@ case "${SLURM_ARRAY_TASK_ID}" in
     0)
         VIEW_NAME="original"
         CONFIG="${PROJECT_ROOT}/configs_new/Pretrain_A0_original_dual_auc.yaml"
-        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_macro_auc_stable.pth"
+        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_original_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
         ;;
     1)
         VIEW_NAME="lung"
         CONFIG="${PROJECT_ROOT}/configs_new/Pretrain_A0_lung_dual_auc.yaml"
-        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_macro_auc_stable.pth"
+        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_lung_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
         ;;
     2)
         VIEW_NAME="heart"
         CONFIG="${PROJECT_ROOT}/configs_new/Pretrain_A0_heart_dual_auc.yaml"
-        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_macro_auc_stable.pth"
+        CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_heart_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
         ;;
     *)
         echo "[ERROR] Unknown array task ID: ${SLURM_ARRAY_TASK_ID}" >&2
