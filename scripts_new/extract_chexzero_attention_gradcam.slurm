@@ -30,7 +30,7 @@ python extract_chexzero_multi_checkpoint_attention_gradcam.py \
   --model_paths /home/woody/iwi5/iwi5362h/CheXzero/checkpoints \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
-  --output_dir /home/vault/chexzero_heatmaps \
+  --output_dir /home/vault/iwi5/iwi5362h/chexzero_heatmaps \
   --target_labels Cardiomegaly "Pleural effusion" \
   --positive_template "{}" \
   --negative_template "no {}" \
