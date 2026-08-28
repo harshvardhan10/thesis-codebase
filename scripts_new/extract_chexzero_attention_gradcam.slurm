@@ -20,17 +20,11 @@ export http_proxy=http://proxy.nhr.fau.de:80
 export https_proxy=http://proxy.nhr.fau.de:80
 
 module load python
-conda activate chexzero-env
+conda activate chexzero-py3.8
 
 cd /home/woody/iwi5/iwi5362h/CheXzero || exit 1
 
 export PYTHONPATH=/home/woody/iwi5/iwi5362h/CheXzero:$PYTHONPATH
-
-python -u zero_shot_vindr.py \
-  --vindr_root /home/woody/iwi5/iwi5362h/data/vindr_cxr \
-  --model_paths /home/woody/iwi5/iwi5362h/CheXzero/checkpoints \
-  --pretrained \
-  --device cuda
 
 python extract_chexzero_multi_checkpoint_attention_gradcam.py \
   --model_paths /home/woody/iwi5/iwi5362h/CheXzero/checkpoints \
