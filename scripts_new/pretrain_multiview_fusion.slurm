@@ -75,7 +75,7 @@ python -u "${TRAIN_SCRIPT}" \
     --text_encoder bert-base-uncased \
     --device cuda \
     --seed 42 \
-    --distributed false \
+    --distributed true \
     --auto_resume true
 
 echo "============================================================"
