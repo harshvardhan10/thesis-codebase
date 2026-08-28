@@ -36,6 +36,7 @@ python extract_chexzero_multi_checkpoint_attention_gradcam.py \
   --negative_template "no {}" \
   --attention_layer -1 \
   --output_map_size 256 \
-  --device cuda
+  --device cuda \
+  --pretrained
 
 echo "Job finished at $(date)"
