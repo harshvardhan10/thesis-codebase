@@ -31,7 +31,7 @@ export PYTHONPATH=/home/woody/iwi5/iwi5362h/ALBEF:$PYTHONPATH
 
 python -u scripts_new/extract_albef_itc_gradcam_heatmaps.py \
   --config configs_new/Pretrain_A0_multiview_fusion_dual_auc.yaml \
-  --checkpoint /home/vault/iwi5/iwi5362h/outputs/A0_multiview_transformer2_mean_dual_auc/checkpoint_best_cardiomegaly_auc.pth \
+  --checkpoint /home/vault/iwi5/iwi5362h/outputs/A0_multiview_transformer2_mean_dual_auc/checkpoint_best_macro_auc_stable.pth \
   --labels_csv /home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test_canonical.csv \
   --images_root /home/woody/iwi5/iwi5362h/data/vindr_cxr/test \
   --output_dir /home/vault/iwi5/iwi5362h/results/heatmaps_itc/fused_transformer2 \
