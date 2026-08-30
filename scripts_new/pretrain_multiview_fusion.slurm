@@ -3,7 +3,7 @@
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:2
 #SBATCH --cpus-per-task=16
-#SBATCH --time=24:00:00
+#SBATCH --time=8:00:00
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/albef_mv_pretrain_%j.out
 #SBATCH --error=/home/vault/iwi5/iwi5362h/logs/albef_mv_pretrain_%j.err
 #SBATCH --mail-type=END,FAIL
