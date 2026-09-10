@@ -2,8 +2,6 @@
 #SBATCH --job-name=albef-mv-mean
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:2
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --time=24:00:00
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/albef_mv_mean_%j.out
@@ -67,6 +65,21 @@ if int(cfg.get('batch_size', -1)) != 32:
     raise RuntimeError('Expected batch_size=32 per GPU for global batch 64')
 print('[Preflight] Full-run config verified: validation ON, no subset/debug limit, 32/GPU.')
 PY_CHECK
+
+export NCCL_DEBUG=INFO
+export NCCL_DEBUG_SUBSYS=INIT,ENV
+export NCCL_ASYNC_ERROR_HANDLING=1
+
+export NCCL_IB_DISABLE=1
+export NCCL_P2P_DISABLE=1
+
+export NCCL_SOCKET_IFNAME=lo
+export GLOO_SOCKET_IFNAME=lo
+
+unset RANK || true
+unset WORLD_SIZE || true
+unset LOCAL_RANK || true
+unset LOCAL_WORLD_SIZE || true
 
 python -m torch.distributed.launch --help >/dev/null
 MASTER_ADDR="127.0.0.1"
