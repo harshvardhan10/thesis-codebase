@@ -64,11 +64,21 @@ export NCCL_ASYNC_ERROR_HANDLING=1
 export NCCL_IB_DISABLE=1
 export NCCL_SOCKET_IFNAME=lo
 export GLOO_SOCKET_IFNAME=lo
+export NCCL_P2P_DISABLE=1
 
 unset RANK || true
 unset WORLD_SIZE || true
 unset LOCAL_RANK || true
 unset LOCAL_WORLD_SIZE || true
+
+echo "===== ALLOCATED GPUs ====="
+nvidia-smi --query-gpu=index,pci.bus_id,name \
+    --format=csv,noheader
+
+echo "===== GPU TOPOLOGY ====="
+nvidia-smi topo -m || true
+
+echo "NCCL_P2P_DISABLE=${NCCL_P2P_DISABLE}"
 
 echo "========================================"
 echo "Node: ${HOSTNAME}"
