@@ -2,8 +2,6 @@
 #SBATCH --job-name=albef-mv-residual-smoke
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:2
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --time=00:30:00
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/albef_mv_residual_smoke_%j.out
