@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=albef-mv-mean-smoke
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:1
+#SBATCH --gres=gpu:a40:2
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
