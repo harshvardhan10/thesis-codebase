@@ -59,6 +59,24 @@ with open(os.environ['SMOKE_CONFIG'], 'w') as handle:
     yaml.safe_dump(cfg, handle, sort_keys=False)
 PY_SMOKE
 
+export NCCL_DEBUG=INFO
+export NCCL_DEBUG_SUBSYS=INIT,ENV
+export NCCL_ASYNC_ERROR_HANDLING=1
+export NCCL_IB_DISABLE=1
+export NCCL_SOCKET_IFNAME=lo
+export GLOO_SOCKET_IFNAME=lo
+
+unset RANK || true
+unset WORLD_SIZE || true
+unset LOCAL_RANK || true
+unset LOCAL_WORLD_SIZE || true
+
+echo "========================================"
+echo "Node: ${HOSTNAME}"
+echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-unset}"
+echo "SLURM_JOB_GPUS=${SLURM_JOB_GPUS:-unset}"
+echo "========================================"
+
 python -m torch.distributed.launch --help >/dev/null
 MASTER_ADDR="127.0.0.1"
 MASTER_PORT=$((29500 + SLURM_JOB_ID % 1000))
