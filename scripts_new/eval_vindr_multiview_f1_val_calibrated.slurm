@@ -49,7 +49,6 @@ FINAL_OUTPUT_DIR="${OUTPUT_ROOT}/final_metrics"
 mkdir -p "${VAL_OUTPUT_DIR}" "${TEST_OUTPUT_DIR}" "${FINAL_OUTPUT_DIR}"
 
 # Fused inference runs three online ViT branches, so start below the old
-# single-view batch size of 64. Increase only after checking A40 memory usage.
 BATCH_SIZE=32
 NUM_WORKERS=8
 
