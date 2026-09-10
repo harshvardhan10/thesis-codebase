@@ -48,6 +48,24 @@ PY
 MASTER_ADDR="127.0.0.1"
 MASTER_PORT=$((20000 + SLURM_JOB_ID % 20000))
 
+# NCCL diagnostics / workaround for a0429 P2P hang
+export NCCL_DEBUG=INFO
+export NCCL_DEBUG_SUBSYS=INIT,ENV
+export NCCL_ASYNC_ERROR_HANDLING=1
+
+# The current A40 pair on a0429 hangs on NCCL P2P/IPC collectives.
+export NCCL_P2P_DISABLE=1
+
+# Single-node training: InfiniBand is unnecessary.
+export NCCL_IB_DISABLE=1
+
+echo "===== GPU TOPOLOGY ====="
+nvidia-smi topo -m || true
+
+echo "===== NCCL SETTINGS ====="
+echo "NCCL_P2P_DISABLE=${NCCL_P2P_DISABLE}"
+echo "NCCL_IB_DISABLE=${NCCL_IB_DISABLE}"
+
 python -m torch.distributed.launch \
     --nproc_per_node=2 \
     --master_addr="${MASTER_ADDR}" \
