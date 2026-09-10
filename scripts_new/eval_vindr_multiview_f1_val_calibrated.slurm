@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=eval-vindr-bare-mvfusion-fc
-#SBATCH --partition=rtx3080
-#SBATCH --gres=gpu:rtx3080:1
+#SBATCH --partition=a40
+#SBATCH --gres=gpu:a40:2
 #SBATCH --time=02:00:00
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/eval_vindr_bare_mvfusion_fc_%j.out
 #SBATCH --error=/home/vault/iwi5/iwi5362h/logs/eval_vindr_bare_mvfusion_fc_%j.err
