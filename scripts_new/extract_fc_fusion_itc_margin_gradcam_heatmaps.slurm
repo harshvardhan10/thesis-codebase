@@ -81,7 +81,7 @@ python -u "${SCRIPT}" \
     --lung_mask_root "${LUNG_MASK_ROOT}" \
     --heart_mask_root "${HEART_MASK_ROOT}" \
     --output_dir "${OUTPUT_DIR}" \
-    --target_labels Cardiomegaly "Pleural Effusion" \
+    --target_labels Cardiomegaly "Pleural effusion" \
     --vit_layer -2 \
     --device cuda
 
