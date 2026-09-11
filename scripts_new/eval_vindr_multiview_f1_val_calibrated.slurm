@@ -37,12 +37,12 @@ TEST_HEART_MASK_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/chexmask_mask_cac
 # Learned multi-view fusion model
 # ---------------------------------------------------------------------------
 CONFIG="${PROJECT_ROOT}/configs_new/Pretrain_A0_multiview_residual_fusion_dual_auc.yaml"
-CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_multiview_residual_fusion_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
+CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_multiview_residual_fusion_dual_auc/checkpoint_best_macro_auc.pth"
 
 MULTIVIEW_EVALUATOR="${PROJECT_ROOT}/scripts_new/zero_shot_eval_vindr_multiview_pos_neg_bare_prompts.py"
 F1_EVALUATOR="${PROJECT_ROOT}/scripts/evaluate_zero_shot_f1_from_validation.py"
 
-OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_bare_prompt_itc_val_calibrated/multiview_residual_fusion/best_cardiomegaly_auc"
+OUTPUT_ROOT="/home/vault/iwi5/iwi5362h/outputs/vindr_zero_shot_bare_prompt_itc_val_calibrated/multiview_residual_fusion/best_macro_auc"
 VAL_OUTPUT_DIR="${OUTPUT_ROOT}/validation"
 TEST_OUTPUT_DIR="${OUTPUT_ROOT}/test"
 FINAL_OUTPUT_DIR="${OUTPUT_ROOT}/final_metrics"
