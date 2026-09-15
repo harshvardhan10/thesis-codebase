@@ -25,7 +25,7 @@ export OMP_NUM_THREADS=1
 SCRIPT="${PROJECT_ROOT}/scripts_new/extract_mean_fusion_itc_margin_gradcam_heatmaps.py"
 CONFIG="${PROJECT_ROOT}/configs_new/Pretrain_A0_multiview_mean_fusion_dual_auc.yaml"
 
-CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_multiview_fusion_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
+CHECKPOINT="/home/vault/iwi5/iwi5362h/outputs/A0_multiview_mean_fusion_dual_auc/checkpoint_best_cardiomegaly_auc.pth"
 
 LABELS_CSV="/home/woody/iwi5/iwi5362h/data/vindr_cxr/annotations/image_labels_test_canonical.csv"
 IMAGES_ROOT="/home/woody/iwi5/iwi5362h/data/vindr_cxr/test"
