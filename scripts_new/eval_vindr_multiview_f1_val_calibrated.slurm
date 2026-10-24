@@ -1,10 +1,10 @@
 #!/bin/bash -l
-#SBATCH --job-name=eval-vindr-bare-mvfusion-residual
+#SBATCH --job-name=eval-vindr-bare-mvfusion-xattn
 #SBATCH --partition=a40
 #SBATCH --gres=gpu:a40:2
 #SBATCH --time=02:00:00
-#SBATCH --output=/home/vault/iwi5/iwi5362h/logs/eval_vindr_bare_mvfusion_residual_%j.out
-#SBATCH --error=/home/vault/iwi5/iwi5362h/logs/eval_vindr_bare_mvfusion_residual_%j.err
+#SBATCH --output=/home/vault/iwi5/iwi5362h/logs/eval_vindr_bare_mvfusion_xattn_%j.out
+#SBATCH --error=/home/vault/iwi5/iwi5362h/logs/eval_vindr_bare_mvfusion_xattn_%j.err
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=harshvardhan.agarwal@fau.de
 
