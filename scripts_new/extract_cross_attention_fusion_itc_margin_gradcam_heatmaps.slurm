@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #SBATCH --job-name=cross-attn-fusion-gradcam
-#SBATCH --partition=a40
+#SBATCH --partition=rtx3080
 #SBATCH --gres=gpu:rtx3080:1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=08:00:00
