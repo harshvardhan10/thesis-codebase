@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=cross-attn-fusion-gradcam
 #SBATCH --partition=a40
-#SBATCH --gres=gpu:a40:1
+#SBATCH --gres=gpu:rtx3080:1
 #SBATCH --cpus-per-task=8
 #SBATCH --time=08:00:00
 #SBATCH --output=/home/vault/iwi5/iwi5362h/logs/cross_attention_fusion_gradcam_%j.out
