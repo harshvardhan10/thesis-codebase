@@ -1,4 +1,3 @@
-
 #!/bin/bash -l
 #SBATCH --job-name=anatomy_itc
 #SBATCH --partition=a40
